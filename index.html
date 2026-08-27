@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Marine Facilities Planning — interactive data-story prototype">
+  <title>Marine Programme 2024–25</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600&family=Newsreader:opsz,wght@6..72,400;6..72,500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="prototype-bar"><span>Prototype</span> Illustrative data · not for operational use</div>
+  <header class="topbar">
+    <a class="brand" href="#overview" aria-label="Marine Facilities Planning home">
+      <svg viewBox="0 0 40 40" aria-hidden="true"><path d="M5 26c5-7 9-11 15-11s10 4 15 11M8 30c4-4 8-6 12-6s8 2 12 6M20 15V7"/></svg>
+      <span>Marine Facilities<br><b>Planning</b></span>
+    </a>
+    <div class="period"><span>Reporting period</span><b>2024—25</b></div>
+    <button class="menu-button" type="button" aria-label="Open chapter navigation" aria-expanded="false"><span></span><span></span></button>
+  </header>
+
+  <aside class="chapter-nav" aria-label="Chapter navigation">
+    <div class="nav-eyebrow">The story</div>
+    <ol>
+      <li><a href="#overview" class="active"><i></i><span><small>01</small>Overview</span></a></li>
+      <li><a href="#programme"><i></i><span><small>02</small>Programme</span></a></li>
+      <li><a href="#emissions"><i></i><span><small>03</small>Emissions</span></a></li>
+      <li><a href="#fleet"><i></i><span><small>04</small>Fleet</span></a></li>
+      <li><a href="#logistics"><i></i><span><small>05</small>Logistics</span></a></li>
+      <li><a href="#opportunities"><i></i><span><small>06</small>Opportunities</span></a></li>
+    </ol>
+    <div class="nav-progress"><span id="page-progress"></span></div>
+    <p>One year of operations,<br>movements and impact.</p>
+  </aside>
+
+  <main>
+    <section id="overview" class="chapter hero" data-title="Overview">
+      <div class="hero-orbit" aria-hidden="true"><div class="orbit orbit-one"></div><div class="orbit orbit-two"></div><div class="globe"><span></span></div></div>
+      <div class="hero-content reveal">
+        <p class="kicker">Marine Programme 2024—25</p>
+        <h1>From programme<br>to <em>impact.</em></h1>
+        <p class="lede">A guided view of the people, vessels and global movements behind one year at sea.</p>
+        <a class="scroll-cue" href="#programme"><span>Scroll to explore</span><i>↓</i></a>
+      </div>
+      <div class="hero-stat reveal">
+        <span>Combined footprint</span>
+        <strong>21.3k</strong>
+        <small>tonnes CO₂e</small>
+      </div>
+    </section>
+
+    <section id="programme" class="chapter section-shell" data-title="Programme">
+      <div class="section-intro reveal">
+        <p class="kicker">02 · Programme</p>
+        <h2>A year shaped by<br><em>science at sea.</em></h2>
+        <p>Across three research vessels, 1,095 available days became a carefully sequenced programme of science, passage, mobilisation and maintenance.</p>
+      </div>
+      <div class="stat-strip reveal">
+        <div><strong>3</strong><span>research vessels</span></div><div><strong>37</strong><span>missions completed</span></div><div><strong>18</strong><span>countries connected</span></div><div><strong>78%</strong><span>programme utilisation</span></div>
+      </div>
+      <div class="visual-block reveal">
+        <div class="visual-heading"><div><p class="kicker">Programme activity</p><h3>How the year unfolded</h3></div><p>Hover or tap an activity to reveal the detail.</p></div>
+        <div class="timeline" id="timeline"></div>
+        <div class="legend" id="timeline-legend"></div>
+      </div>
+    </section>
+
+    <section id="emissions" class="chapter dark-section section-shell" data-title="Emissions">
+      <div class="section-intro reveal"><p class="kicker">03 · Emissions</p><h2>Most impact happens<br><em>beyond the shoreline.</em></h2><p>The footprint is concentrated in vessel operations. Freight and crew travel matter—but the greatest leverage sits at sea.</p></div>
+      <div class="emission-layout reveal">
+        <div class="donut-wrap">
+          <div class="donut" id="emission-donut"><div><strong>21.3k</strong><span>t CO₂e</span></div></div>
+        </div>
+        <div class="emission-list" id="emission-list"></div>
+      </div>
+      <p class="microcopy">Select a driver to focus the footprint.</p>
+    </section>
+
+    <section id="fleet" class="chapter section-shell" data-title="Fleet">
+      <div class="section-intro reveal"><p class="kicker">04 · Fleet</p><h2>Three vessels.<br><em>Distinct roles.</em></h2><p>Each platform contributes a different balance of operating days, programme reach and environmental impact.</p></div>
+      <div class="vessel-tabs reveal" role="tablist" aria-label="Select vessel"></div>
+      <div class="vessel-panel reveal">
+        <div class="ship-illustration" aria-hidden="true"><svg viewBox="0 0 720 220"><path class="sea" d="M0 188c80-25 135 25 215 0s135 25 215 0 135 25 290 0"/><path class="hull" d="M95 139h515l-42 48H166z"/><path class="deck" d="M210 94h250v45H210zM274 58h105v36H274zM395 108h100v31H395z"/><path class="mast" d="M325 58V20m0 12h73m-5 0 32 62M283 58l-28-33"/><circle cx="244" cy="116" r="10"/><circle cx="282" cy="116" r="10"/></svg></div>
+        <div class="vessel-copy"><p class="kicker" id="vessel-type"></p><h3 id="vessel-name"></h3><p id="vessel-description"></p><div class="vessel-metrics" id="vessel-metrics"></div><button class="text-button" id="vessel-more" type="button">View vessel detail <span>↗</span></button></div>
+      </div>
+    </section>
+
+    <section id="logistics" class="chapter map-section section-shell" data-title="Logistics">
+      <div class="section-intro reveal"><p class="kicker">05 · Logistics</p><h2>One programme.<br><em>A global network.</em></h2><p>Every mission depends on an international choreography of equipment, freight and people.</p></div>
+      <div class="map-controls reveal"><div class="segmented" role="group" aria-label="Route type"><button class="active" data-route="combined">Combined</button><button data-route="freight">Freight</button><button data-route="people">People</button></div><p>Tap a port for local detail</p></div>
+      <div class="world-map reveal" id="world-map">
+        <svg viewBox="0 0 1000 500" role="img" aria-label="Illustrative global logistics routes">
+          <path class="land" d="M65 88l101-52 118 19 28 44-51 38-5 55-63 17-45-28-56 11-42-39zm204 145 49 24 30 69-18 119-35-38-9-72-29-45zm266-151 76-35 123 21 58 61-34 26-71-9-23 31-74-8-44-35zm55 119 70 17 25 64-37 112-53-54-30-96zm169-36 77-28 113 41-23 61-85 9-38-29zm106 175 74 11 36 52-88 30-61-41z"/>
+          <g id="route-lines"></g><g id="route-nodes"></g>
+        </svg>
+        <div class="map-tooltip" id="map-tooltip"></div>
+      </div>
+      <div class="network-stats reveal"><div><strong>126</strong><span>freight movements</span></div><div><strong>842</strong><span>crew journeys</span></div><div><strong>14</strong><span>operational ports</span></div></div>
+    </section>
+
+    <section id="opportunities" class="chapter opportunity section-shell" data-title="Opportunities">
+      <div class="section-intro reveal"><p class="kicker">06 · Opportunities</p><h2>Insight becomes useful<br>when it changes <em>what’s next.</em></h2><p>Explore an illustrative combination of operational interventions and see how the estimated programme footprint responds.</p></div>
+      <div class="scenario reveal">
+        <div class="scenario-controls">
+          <p class="kicker">Scenario explorer</p>
+          <label><span>Lower-carbon vessel operations <output id="vessel-output">12%</output></span><input id="vessel-range" type="range" min="0" max="25" value="12"></label>
+          <label><span>Consolidated freight <output id="freight-output">20%</output></span><input id="freight-range" type="range" min="0" max="40" value="20"></label>
+          <label><span>Reduced air travel <output id="travel-output">15%</output></span><input id="travel-range" type="range" min="0" max="35" value="15"></label>
+          <button class="reset-button" id="reset-scenario" type="button">Reset scenario</button>
+        </div>
+        <div class="scenario-result"><span>Estimated programme reduction</span><strong id="reduction-value">−11.1%</strong><div class="result-bar"><i id="result-fill"></i></div><p><b id="saved-value">2,367</b> tonnes CO₂e potentially avoided</p><small>Illustrative estimate based on prototype assumptions.</small></div>
+      </div>
+      <footer><div class="brand footer-brand"><svg viewBox="0 0 40 40"><path d="M5 26c5-7 9-11 15-11s10 4 15 11M8 30c4-4 8-6 12-6M20 15V7"/></svg><span>Marine Facilities<br><b>Planning</b></span></div><p>Prototype · illustrative data only<br>Designed as an interactive data story.</p><a href="#overview">Back to top ↑</a></footer>
+    </section>
+  </main>
+
+  <div class="popover" id="popover" role="dialog" aria-modal="true" aria-hidden="true"><button type="button" aria-label="Close detail">×</button><p class="kicker">Vessel profile</p><h3 id="popover-title"></h3><p id="popover-body"></p><div id="popover-data"></div></div>
+  <div class="popover-backdrop" id="popover-backdrop"></div>
+  <script src="script.js"></script>
+</body>
+</html>
