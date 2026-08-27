@@ -11,28 +11,31 @@
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <div class="prototype-bar"><span>Prototype</span> Illustrative data · not for operational use</div>
   <header class="topbar">
     <a class="brand" href="#overview" aria-label="Marine Facilities Planning home">
       <img src="icon-marine-research.svg" alt="" width="50" height="50" aria-hidden="true">
-      <span>Marine Facilities<br><b>Planning</b></span>
     </a>
-    <div class="period"><span>Reporting period</span><b>2024—25</b></div>
+    <div class="period">
+      <label for="reporting-period">Reporting period</label>
+      <select id="reporting-period" aria-label="Select reporting period">
+        <option value="2024-25" selected>2024-25</option>
+        <option value="2023-24">2023-24</option>
+        <option value="2022-23">2022-23</option>
+      </select>
+    </div>
     <button class="menu-button" type="button" aria-label="Open chapter navigation" aria-expanded="false"><span></span><span></span></button>
   </header>
 
   <aside class="chapter-nav" aria-label="Chapter navigation">
-    <div class="nav-eyebrow">The story</div>
     <ol>
-      <li><a href="#overview" class="active"><i></i><span><small>01</small>Overview</span></a></li>
-      <li><a href="#programme"><i></i><span><small>02</small>Programme</span></a></li>
-      <li><a href="#emissions"><i></i><span><small>03</small>Emissions</span></a></li>
-      <li><a href="#fleet"><i></i><span><small>04</small>Fleet</span></a></li>
-      <li><a href="#logistics"><i></i><span><small>05</small>Logistics</span></a></li>
-      <li><a href="#opportunities"><i></i><span><small>06</small>Opportunities</span></a></li>
+      <li><a href="#overview" class="active"><i></i><span>Overview</span></a></li>
+      <li><a href="#programme"><i></i><span>Programme</span></a></li>
+      <li><a href="#emissions"><i></i><span>Emissions</span></a></li>
+      <li><a href="#fleet"><i></i><span>Fleet</span></a></li>
+      <li><a href="#logistics"><i></i><span>Logistics</span></a></li>
+      <li><a href="#opportunities"><i></i><span>Opportunities</span></a></li>
     </ol>
     <div class="nav-progress"><span id="page-progress"></span></div>
-    <p>One year of operations,<br>movements and impact.</p>
   </aside>
 
   <main>
@@ -112,7 +115,7 @@
         </div>
         <div class="scenario-result"><span>Estimated programme reduction</span><strong id="reduction-value">−11.1%</strong><div class="result-bar"><i id="result-fill"></i></div><p><b id="saved-value">2,367</b> tonnes CO₂e potentially avoided</p><small>Illustrative estimate based on prototype assumptions.</small></div>
       </div>
-      <footer><div class="brand footer-brand"><img src="icon-marine-research.svg" alt="" width="50" height="50" aria-hidden="true"><span>Marine Facilities<br><b>Planning</b></span></div><p>Prototype · illustrative data only<br>Designed as an interactive data story.</p><a href="#overview">Back to top ↑</a></footer>
+      <footer><div class="brand footer-brand"><img src="icon-marine-research.svg" alt="" width="50" height="50" aria-hidden="true"></div><p>Prototype · illustrative data only<br>Designed as an interactive data story.</p><a href="#overview">Back to top ↑</a></footer>
     </section>
   </main>
 
