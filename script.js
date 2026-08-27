@@ -41,3 +41,33 @@ const sectionObserver=new IntersectionObserver(entries=>{entries.forEach(e=>{if(
 const revealObserver=new IntersectionObserver(entries=>entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');revealObserver.unobserve(e.target)}}),{threshold:.12});document.querySelectorAll('.reveal').forEach(e=>revealObserver.observe(e));
 window.addEventListener('scroll',()=>{const max=document.documentElement.scrollHeight-innerHeight;document.querySelector('#page-progress').style.height=(scrollY/max*100)+'%';document.querySelector('.topbar').classList.toggle('scrolled',scrollY>20)},{passive:true});
 const menu=document.querySelector('.menu-button'),nav=document.querySelector('.chapter-nav');menu.onclick=()=>{const open=nav.classList.toggle('open');menu.setAttribute('aria-expanded',String(open))};navLinks.forEach(a=>a.onclick=()=>{nav.classList.remove('open');menu.setAttribute('aria-expanded','false')});
+
+const parallaxHero=document.querySelector('.hero'),parallaxGlobe=document.querySelector('.globe');
+if(parallaxHero&&parallaxGlobe&&!window.matchMedia('(prefers-reduced-motion: reduce)').matches){
+  let globeFrame=0,globeTargetX=0,globeTargetY=0,globeHovering=false,globeScaleAnimation=null;
+  const renderGlobe=()=>{parallaxGlobe.style.setProperty('--globe-x',`${globeTargetX.toFixed(2)}px`);parallaxGlobe.style.setProperty('--globe-y',`${globeTargetY.toFixed(2)}px`);globeFrame=0};
+  const queueGlobe=()=>{if(!globeFrame)globeFrame=requestAnimationFrame(renderGlobe)};
+  parallaxHero.addEventListener('pointermove',event=>{
+    if(event.pointerType&&event.pointerType!=='mouse')return;
+    if(globeHovering)return;
+    const rect=parallaxGlobe.getBoundingClientRect(),dx=event.clientX-(rect.left+rect.width/2),dy=event.clientY-(rect.top+rect.height/2),distance=Math.hypot(dx,dy),range=Math.max(rect.width*2.2,320),strength=Math.max(0,1-distance/range);
+    if(!strength){globeTargetX=0;globeTargetY=0}else{const travel=10*strength;globeTargetX=distance?dx/distance*travel:0;globeTargetY=distance?dy/distance*travel:0}
+    queueGlobe();
+  },{passive:true});
+  const currentGlobeScale=()=>getComputedStyle(parallaxGlobe).scale==='none'?'1':getComputedStyle(parallaxGlobe).scale;
+  parallaxGlobe.addEventListener('pointerenter',()=>{
+    globeHovering=true;
+    const start=currentGlobeScale();
+    if(globeScaleAnimation)globeScaleAnimation.cancel();
+    globeScaleAnimation=parallaxGlobe.animate([{scale:start},{scale:'1.12',offset:.44},{scale:'1.07'}],{duration:650,easing:'cubic-bezier(.2,.82,.24,1)',fill:'forwards'});
+  },{passive:true});
+  parallaxGlobe.addEventListener('pointerleave',()=>{
+    globeHovering=false;
+    const start=currentGlobeScale();
+    if(globeScaleAnimation)globeScaleAnimation.cancel();
+    const release=parallaxGlobe.animate([{scale:start},{scale:'1'}],{duration:920,easing:'cubic-bezier(.16,.82,.18,1)',fill:'forwards'});
+    globeScaleAnimation=release;
+    release.onfinish=()=>{if(globeScaleAnimation===release){release.cancel();globeScaleAnimation=null}};
+  },{passive:true});
+  parallaxHero.addEventListener('pointerleave',()=>{globeTargetX=0;globeTargetY=0;queueGlobe()},{passive:true});
+}
