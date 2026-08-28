@@ -3,15 +3,39 @@ const programme = [
   {name:'RRS James Cook',days:326,segments:[['Mobilisation',22],['Science',112],['Passage',49],['Science',104],['Maintenance',39]]},
   {name:'RRS SDA',days:188,segments:[['Maintenance',44],['Science',61],['Passage',28],['Science',39],['Mobilisation',16]]}
 ];
-const activityColors={Science:'#2c7d78',Passage:'#eab85d',Mobilisation:'#ee765e',Maintenance:'#aeb9af'};
+const activityColors={Science:'#39aa90',Passage:'#f3b547',Mobilisation:'#d74400',Maintenance:'#052b2b'};
 const timeline=document.querySelector('#timeline');
 programme.forEach(v=>{const row=document.createElement('div');row.className='timeline-row';row.innerHTML=`<div class="timeline-name"><strong>${v.name}</strong><small>${v.days} active days</small></div><div class="timeline-track">${v.segments.map(([n,d])=>`<button class="timeline-segment" style="width:${d/v.days*100}%;background:${activityColors[n]}" data-label="${n} · ${d} days" aria-label="${n}, ${d} days"></button>`).join('')}</div>`;timeline.append(row)});
 document.querySelector('#timeline-legend').innerHTML=Object.entries(activityColors).map(([n,c])=>`<span><i style="background:${c}"></i>${n}</span>`).join('');
 
-const emissions=[{name:'Vessel operations',value:15356,pct:72,color:'#c9f04b'},{name:'Freight movements',value:3412,pct:16,color:'#73b9c8'},{name:'Crew travel',value:2560,pct:12,color:'#ee765e'}];
-const emissionList=document.querySelector('#emission-list'),donut=document.querySelector('#emission-donut');
-emissions.forEach((e,i)=>{const b=document.createElement('button');b.innerHTML=`<i style="background:${e.color}"></i><span>${e.name}</span><b>${e.pct}%</b>`;b.addEventListener('click',()=>{document.querySelectorAll('.emission-list button').forEach(x=>x.classList.remove('active'));b.classList.add('active');donut.style.background=`conic-gradient(${e.color} 0 ${e.pct}%,rgba(255,255,255,.11) ${e.pct}% 100%)`;donut.querySelector('strong').textContent=(e.value/1000).toFixed(1)+'k';donut.querySelector('span').textContent='t CO₂e'});emissionList.append(b)});
-donut.addEventListener('click',()=>{donut.style.background='conic-gradient(#c9f04b 0 72%,#73b9c8 72% 88%,#ee765e 88%)';donut.querySelector('strong').textContent='21.3k';document.querySelectorAll('.emission-list button').forEach(x=>x.classList.remove('active'))});
+const emissions=[{name:'Vessel operations',value:15356,pct:72,color:'#39aa90'},{name:'Freight movements',value:3412,pct:16,color:'#f3b547'},{name:'Crew travel',value:2560,pct:12,color:'#d74400'}];
+const emissionList=document.querySelector('#emission-list'),donut=document.querySelector('#emission-donut'),pie=donut.querySelector('svg');
+const polar=(angle,radius=46)=>({x:50+radius*Math.cos(angle),y:50+radius*Math.sin(angle)});
+const piePath=(start,end)=>{const outerStart=polar(start),outerEnd=polar(end),innerEnd=polar(end,25),innerStart=polar(start,25),large=end-start>Math.PI?1:0;return `M${outerStart.x} ${outerStart.y} A46 46 0 ${large} 1 ${outerEnd.x} ${outerEnd.y} L${innerEnd.x} ${innerEnd.y} A25 25 0 ${large} 0 ${innerStart.x} ${innerStart.y} Z`};
+let pieAngle=-Math.PI/2;
+const resetEmissions=()=>{
+  donut.querySelector('strong').textContent='21.3k';
+  donut.querySelector('span').textContent='Tonnes CO₂e';
+  emissionList.querySelectorAll('button').forEach(button=>button.classList.remove('active'));
+  pie.querySelectorAll('.pie-slice').forEach(slice=>slice.classList.remove('selected','muted'));
+};
+const selectEmission=index=>{
+  const emission=emissions[index];
+  emissionList.querySelectorAll('button').forEach((button,i)=>button.classList.toggle('active',i===index));
+  pie.querySelectorAll('.pie-slice').forEach((slice,i)=>{slice.classList.toggle('selected',i===index);slice.classList.toggle('muted',i!==index)});
+  donut.querySelector('strong').textContent=(emission.value/1000).toFixed(1)+'k';
+  donut.querySelector('span').textContent='Tonnes CO₂e';
+};
+emissions.forEach((emission,index)=>{
+  const start=pieAngle,end=start+emission.pct/100*Math.PI*2,mid=(start+end)/2;
+  pieAngle=end;
+  const slice=document.createElementNS('http://www.w3.org/2000/svg','path');
+  slice.setAttribute('d',piePath(start,end));slice.setAttribute('fill',emission.color);slice.setAttribute('tabindex','0');slice.setAttribute('role','button');slice.setAttribute('aria-label',`${emission.name}, ${emission.pct}%`);
+  slice.classList.add('pie-slice');slice.style.setProperty('--slice-x',`${Math.cos(mid)*5}px`);slice.style.setProperty('--slice-y',`${Math.sin(mid)*5}px`);
+  slice.addEventListener('click',event=>{event.stopPropagation();selectEmission(index)});slice.addEventListener('keydown',event=>{if(event.key==='Enter'||event.key===' '){event.preventDefault();selectEmission(index)}});pie.append(slice);
+  const button=document.createElement('button');button.innerHTML=`<i style="background:${emission.color}"></i><span>${emission.name}</span><b>${emission.pct}%</b>`;button.addEventListener('click',()=>selectEmission(index));emissionList.append(button);
+});
+donut.addEventListener('click',event=>{if(!event.target.classList.contains('pie-slice'))resetEmissions()});
 
 const vessels=[
   {name:'RRS Discovery',type:'Oceanographic research vessel',description:'Long-range, multidisciplinary science platform with the programme’s highest share of active research days.',days:341,science:238,emissions:'6.9k',detail:'Discovery combines global range with advanced oceanographic capability. Its annual programme spans climate, deep-ocean and ecosystem research.',ports:'8',missions:'15',utilisation:'93%'},
@@ -37,9 +61,31 @@ document.querySelectorAll('[data-route]').forEach(btn=>btn.onclick=()=>{document
 const ranges=['vessel','freight','travel'];function updateScenario(){ranges.forEach(k=>document.querySelector(`#${k}-output`).textContent=document.querySelector(`#${k}-range`).value+'%');const v=+document.querySelector('#vessel-range').value,f=+document.querySelector('#freight-range').value,t=+document.querySelector('#travel-range').value;const reduction=(v*.72+f*.16+t*.12),saved=Math.round(21328*reduction/100);document.querySelector('#reduction-value').textContent='−'+reduction.toFixed(1)+'%';document.querySelector('#saved-value').textContent=saved.toLocaleString('en-GB');document.querySelector('#result-fill').style.width=Math.min(100,reduction*3.4)+'%'}ranges.forEach(k=>document.querySelector(`#${k}-range`).oninput=updateScenario);document.querySelector('#reset-scenario').onclick=()=>{document.querySelector('#vessel-range').value=0;document.querySelector('#freight-range').value=0;document.querySelector('#travel-range').value=0;updateScenario()};updateScenario();
 
 const sections=[...document.querySelectorAll('.chapter')],navLinks=[...document.querySelectorAll('.chapter-nav a')];
-const sectionObserver=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting){navLinks.forEach(a=>a.classList.toggle('active',a.getAttribute('href')==='#'+e.target.id))}})},{rootMargin:'-35% 0px -55% 0px'});sections.forEach(s=>sectionObserver.observe(s));
+const sectionObserver=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting){const activeIndex=sections.indexOf(e.target);navLinks.forEach(a=>a.classList.toggle('active',a.getAttribute('href')==='#'+e.target.id));document.querySelector('#page-progress').style.height=(activeIndex/(sections.length-1)*100)+'%'}})},{rootMargin:'-35% 0px -55% 0px'});sections.forEach(s=>sectionObserver.observe(s));
 const revealObserver=new IntersectionObserver(entries=>entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');revealObserver.unobserve(e.target)}}),{threshold:.12});document.querySelectorAll('.reveal').forEach(e=>revealObserver.observe(e));
-window.addEventListener('scroll',()=>{const max=document.documentElement.scrollHeight-innerHeight;document.querySelector('#page-progress').style.height=(scrollY/max*100)+'%';document.querySelector('.topbar').classList.toggle('scrolled',scrollY>20)},{passive:true});
+const programmeStats=document.querySelector('#programme .stat-strip');
+if(programmeStats&&!window.matchMedia('(prefers-reduced-motion: reduce)').matches){
+  const statValues=[...programmeStats.querySelectorAll('strong')].map(el=>({el,value:Number.parseInt(el.textContent,10),suffix:el.textContent.includes('%')?'%':''}));
+  statValues.forEach(({el,suffix})=>el.textContent='0'+suffix);
+  const statsObserver=new IntersectionObserver(entries=>entries.forEach(entry=>{
+    if(!entry.isIntersecting)return;
+    const animationStart=performance.now(),duration=1250,stagger=90;
+    const count=now=>{
+      let complete=true;
+      statValues.forEach(({el,value,suffix},index)=>{
+        const progress=Math.max(0,Math.min(1,(now-animationStart-index*stagger)/duration));
+        const eased=1-Math.pow(1-progress,4);
+        el.textContent=Math.round(value*eased)+suffix;
+        if(progress<1)complete=false;
+      });
+      if(!complete)requestAnimationFrame(count);
+    };
+    requestAnimationFrame(count);
+    statsObserver.unobserve(entry.target);
+  }),{threshold:.35});
+  statsObserver.observe(programmeStats);
+}
+window.addEventListener('scroll',()=>{document.querySelector('.topbar').classList.toggle('scrolled',scrollY>20)},{passive:true});
 const menu=document.querySelector('.menu-button'),nav=document.querySelector('.chapter-nav');menu.onclick=()=>{const open=nav.classList.toggle('open');menu.setAttribute('aria-expanded',String(open))};navLinks.forEach(a=>a.onclick=()=>{nav.classList.remove('open');menu.setAttribute('aria-expanded','false')});
 
 const parallaxHero=document.querySelector('.hero'),parallaxGlobe=document.querySelector('.globe');

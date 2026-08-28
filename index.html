@@ -7,7 +7,7 @@
   <title>Marine Programme 2024–25</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@300;400;500;600&family=Newsreader:opsz,wght@6..72,400;6..72,500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@300;400;500;600&family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -48,9 +48,12 @@
         <a class="scroll-cue" href="#programme"><span>Scroll to explore</span><i>↓</i></a>
       </div>
       <div class="hero-stat reveal">
-        <span>Combined footprint</span>
         <strong>21.3k</strong>
-        <small>tonnes CO₂e</small>
+        <div class="hero-stat-meta">
+          <small>Tonnes CO₂e</small>
+          <i aria-hidden="true">•</i>
+          <span>Combined footprint</span>
+        </div>
       </div>
     </section>
 
@@ -60,13 +63,22 @@
         <h2>A year shaped by<br><em>science at sea.</em></h2>
         <p>Across three research vessels, 1,095 available days became a carefully sequenced programme of science, passage, mobilisation and maintenance.</p>
       </div>
-      <div class="stat-strip reveal">
-        <div><strong>3</strong><span>research vessels</span></div><div><strong>37</strong><span>missions completed</span></div><div><strong>18</strong><span>countries connected</span></div><div><strong>78%</strong><span>programme utilisation</span></div>
-      </div>
-      <div class="visual-block reveal">
-        <div class="visual-heading"><div><p class="kicker">Programme activity</p><h3>How the year unfolded</h3></div><p>Hover or tap an activity to reveal the detail.</p></div>
-        <div class="timeline" id="timeline"></div>
-        <div class="legend" id="timeline-legend"></div>
+      <div class="programme-data-grid">
+        <div class="programme-copy programme-copy-summary reveal">
+          <h3>The year at a glance</h3>
+          <p>Four figures reveal the scale of the programme: the vessels involved, the missions delivered, its international reach and how intensively the available year was used.</p>
+        </div>
+        <div class="stat-strip reveal">
+          <div><strong>3</strong><span>research vessels</span></div><div><strong>37</strong><span>missions completed</span></div><div><strong>18</strong><span>countries connected</span></div><div><strong>78%</strong><span>programme utilisation</span></div>
+        </div>
+        <div class="programme-copy programme-copy-timeline reveal">
+          <h3>How the year unfolded</h3>
+          <p>Each vessel followed its own rhythm of science, passage, mobilisation and maintenance across the year. Hover or tap an activity to explore the detail.</p>
+        </div>
+        <div class="timeline-card reveal">
+          <div class="timeline" id="timeline"></div>
+          <div class="legend" id="timeline-legend"></div>
+        </div>
       </div>
     </section>
 
@@ -74,7 +86,10 @@
       <div class="section-intro reveal"><p class="kicker">03 · Emissions</p><h2>Most impact happens<br><em>beyond the shoreline.</em></h2><p>The footprint is concentrated in vessel operations. Freight and crew travel matter—but the greatest leverage sits at sea.</p></div>
       <div class="emission-layout reveal">
         <div class="donut-wrap">
-          <div class="donut" id="emission-donut"><div><strong>21.3k</strong><span>t CO₂e</span></div></div>
+          <div class="donut" id="emission-donut">
+            <svg viewBox="0 0 100 100" role="img" aria-label="Emissions footprint by driver"></svg>
+            <div><strong>21.3k</strong><span>Tonnes CO₂e</span></div>
+          </div>
         </div>
         <div class="emission-list" id="emission-list"></div>
       </div>
