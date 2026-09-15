@@ -31,8 +31,8 @@
       <li><a href="#overview" class="active"><i></i><span>Overview</span></a></li>
       <li><a href="#programme"><i></i><span>Programme</span></a></li>
       <li><a href="#emissions"><i></i><span>Emissions</span></a></li>
-      <li><a href="#fleet"><i></i><span>Fleet</span></a></li>
       <li><a href="#logistics"><i></i><span>Logistics</span></a></li>
+      <li><a href="#fleet"><i></i><span>Fleet</span></a></li>
       <li><a href="#opportunities"><i></i><span>Opportunities</span></a></li>
     </ol>
     <div class="nav-progress"><span id="page-progress"></span></div>
@@ -93,20 +93,10 @@
         </div>
         <div class="emission-list" id="emission-list"></div>
       </div>
-      <p class="microcopy">Select a driver to focus the footprint.</p>
-    </section>
-
-    <section id="fleet" class="chapter section-shell" data-title="Fleet">
-      <div class="section-intro reveal"><p class="kicker">04 · Fleet</p><h2>Three vessels.<br><em>Distinct roles.</em></h2><p>Each platform contributes a different balance of operating days, programme reach and environmental impact.</p></div>
-      <div class="vessel-tabs reveal" role="tablist" aria-label="Select vessel"></div>
-      <div class="vessel-panel reveal">
-        <div class="ship-illustration" aria-hidden="true"><svg viewBox="0 0 720 220"><path class="sea" d="M0 188c80-25 135 25 215 0s135 25 215 0 135 25 290 0"/><path class="hull" d="M95 139h515l-42 48H166z"/><path class="deck" d="M210 94h250v45H210zM274 58h105v36H274zM395 108h100v31H395z"/><path class="mast" d="M325 58V20m0 12h73m-5 0 32 62M283 58l-28-33"/><circle cx="244" cy="116" r="10"/><circle cx="282" cy="116" r="10"/></svg></div>
-        <div class="vessel-copy"><p class="kicker" id="vessel-type"></p><h3 id="vessel-name"></h3><p id="vessel-description"></p><div class="vessel-metrics" id="vessel-metrics"></div><button class="text-button" id="vessel-more" type="button">View vessel detail <span>↗</span></button></div>
-      </div>
     </section>
 
     <section id="logistics" class="chapter map-section section-shell" data-title="Logistics">
-      <div class="section-intro reveal"><p class="kicker">05 · Logistics</p><h2>One programme.<br><em>A global network.</em></h2><p>Every mission depends on an international choreography of equipment, freight and people.</p></div>
+      <div class="section-intro reveal"><p class="kicker">04 · Logistics</p><h2>One programme.<br><em>A global network.</em></h2><p>Every mission depends on an international choreography of equipment, freight and people.</p></div>
       <div class="map-controls reveal"><div class="segmented" role="group" aria-label="Route type"><button class="active" data-route="combined">Combined</button><button data-route="freight">Freight</button><button data-route="people">People</button></div><p>Tap a port for local detail</p></div>
       <div class="world-map reveal" id="world-map">
         <svg viewBox="0 0 1000 500" role="img" aria-label="Illustrative global logistics routes">
@@ -116,6 +106,15 @@
         <div class="map-tooltip" id="map-tooltip"></div>
       </div>
       <div class="network-stats reveal"><div><strong>126</strong><span>freight movements</span></div><div><strong>842</strong><span>crew journeys</span></div><div><strong>14</strong><span>operational ports</span></div></div>
+    </section>
+
+    <section id="fleet" class="chapter dark-section section-shell" data-title="Fleet">
+      <div class="section-intro reveal"><p class="kicker">05 · Fleet</p><h2>Three vessels.<br><em>Distinct roles.</em></h2><p>Each platform contributes a different balance of operating days, programme reach and environmental impact.</p></div>
+      <div class="vessel-tabs reveal" role="tablist" aria-label="Select vessel"></div>
+      <div class="vessel-panel reveal">
+        <figure class="ship-illustration"><img id="vessel-image" src="assets/vessels/rrs-discovery.jpg" alt="RRS Discovery at sea"><figcaption id="vessel-credit"></figcaption></figure>
+        <div class="vessel-copy"><p class="kicker" id="vessel-type"></p><h3 id="vessel-name"></h3><p id="vessel-description"></p><div class="vessel-metrics" id="vessel-metrics"></div><button class="text-button" id="vessel-more" type="button">View vessel detail <span>↗</span></button></div>
+      </div>
     </section>
 
     <section id="opportunities" class="chapter opportunity section-shell" data-title="Opportunities">

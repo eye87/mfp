@@ -99,14 +99,15 @@ body:before{content:"";position:fixed;z-index:20;top:0;bottom:0;left:0;width:255
 @media(max-width:600px){#emissions .section-intro h2{font-size:80px}}
 .section-intro h2{font-size:80px;line-height:1.05}
 #emissions .emission-layout{
-  grid-template-columns:minmax(400px,1fr) minmax(280px,360px);
-  gap:clamp(80px,9vw,150px);
-  max-width:1200px;
+  grid-template-columns:minmax(460px,662px) minmax(280px,390px);
+  gap:clamp(35px,4vw,65px);
+  max-width:1117px;
+  margin:-50px auto 0 0;
 }
 #emissions .donut-wrap{justify-items:start}
 #emissions .donut{
   position:relative;
-  width:min(47vw,576px);
+  width:min(54vw,662px);
   overflow:visible;
   background:none;
   box-shadow:none;
@@ -125,22 +126,68 @@ body:before{content:"";position:fixed;z-index:20;top:0;bottom:0;left:0;width:255
 }
 #emissions .pie-slice{
   cursor:pointer;
-  transform:translate(0,0);
-  transform-box:fill-box;
-  transform-origin:center;
-  transition:transform .65s cubic-bezier(.16,.82,.18,1),opacity .4s ease,filter .4s ease;
+  transition:opacity .4s ease,filter .4s ease;
   outline:none;
 }
-#emissions .pie-slice:hover,#emissions .pie-slice:focus-visible,#emissions .pie-slice.selected{transform:translate(var(--slice-x),var(--slice-y));filter:brightness(1.04)}
+#emissions .pie-slice-pop{
+  transform:scale(.9387755);
+  transform-box:view-box;
+  transform-origin:50px 50px;
+  transition:transform .72s cubic-bezier(.16,.82,.18,1);
+}
+#emissions .pie-slice:hover .pie-slice-pop,#emissions .pie-slice:focus-visible .pie-slice-pop,#emissions .pie-slice.selected .pie-slice-pop{transform:scale(1)}
+#emissions .pie-slice:hover,#emissions .pie-slice:focus-visible,#emissions .pie-slice.selected{filter:brightness(1.04)}
 #emissions .pie-slice.muted{opacity:.28}
-#emissions .emission-list{width:100%;max-width:360px;justify-self:start}
-#emissions .emission-list button{padding:22px 4px}
+#emissions .emission-list{width:100%;max-width:390px;justify-self:start;padding:24px;border-radius:32px;background:#071d1e}
+#emissions .emission-list button{grid-template-columns:22px 1fr auto;padding:20px;border-bottom-color:rgba(255,255,255,.09);border-radius:18px;transition:background-color .35s cubic-bezier(.16,1,.3,1),filter .35s ease}
+#emissions .emission-list i{width:18px;height:18px}
+#emissions .emission-list button:hover,#emissions .emission-list button:focus-visible,#emissions .emission-list button.active{padding-left:20px;background:rgba(255,255,255,.055);filter:brightness(1.04);outline:none}
+#emissions .emission-list button:last-child{border-bottom:0}
 @media(max-width:900px){
   #emissions .emission-layout{grid-template-columns:1fr;gap:65px}
   #emissions .donut-wrap{justify-items:center}
   #emissions .donut{width:min(76vw,470px)}
   #emissions .emission-list{max-width:470px;justify-self:center}
 }
+#fleet .section-intro{max-width:720px;margin-left:0;margin-right:auto;text-align:left}
+#fleet .section-intro .kicker{transform:translateY(-5px)}
+#fleet .section-intro h2{font-size:80px;line-height:1.05;letter-spacing:-.055em}
+#fleet .section-intro h2 em{color:#d74400}
+#fleet .section-intro>p:last-child{max-width:470px;margin:38px 0 0;color:var(--ink);font-size:16px;font-weight:300;line-height:30px;transform:translateY(-15px)}
+#fleet .vessel-tabs{width:max-content;max-width:100%;gap:6px;margin-top:-100px;padding:5px;border:0;border-radius:999px;background:var(--ink)}
+#fleet .vessel-tabs button{flex:0 0 auto;min-width:128px;padding:11px 20px;border:0;border-radius:999px;text-align:center;color:rgba(255,255,255,.68);transition:background-color .3s ease,color .3s ease}
+#fleet .vessel-tabs button:hover,#fleet .vessel-tabs button:focus-visible{color:#fff;outline:none}
+#fleet .vessel-tabs button.active{border:0;background:#fff;color:var(--ink)}
+#fleet .vessel-panel{grid-template-columns:minmax(0,1.05fr) minmax(340px,.75fr);gap:clamp(44px,6vw,84px);max-width:1180px;min-height:0;margin-top:25px}
+#fleet .ship-illustration{position:relative;margin:0;overflow:hidden;border-radius:44px;background:var(--paper)}
+#fleet .ship-illustration img{display:block;width:100%;height:470px;object-fit:cover;transition:opacity .3s ease,transform .7s cubic-bezier(.16,.82,.18,1)}
+#fleet .ship-illustration:hover img{transform:scale(1.025)}
+#fleet .ship-illustration figcaption{position:absolute;right:18px;bottom:16px;padding:7px 10px;border-radius:10px;background:rgba(7,29,30,.78);backdrop-filter:blur(8px);font:400 8px/1.3 var(--mono);letter-spacing:.03em}
+#fleet .ship-illustration figcaption a{color:#fff;text-decoration:none}
+#fleet .vessel-copy{padding:28px 0}
+#fleet .vessel-copy h3{font-size:58px;line-height:1}
+#fleet .vessel-copy>p:not(.kicker){max-width:430px;color:rgba(16,42,43,.76);font-size:14px;line-height:1.75}
+#fleet .vessel-metrics{gap:10px}
+#fleet .vessel-metrics>div{padding:18px 16px;border-radius:20px;background:#052b2b;color:#fff}
+#fleet .vessel-metrics>div:nth-child(2){background:#0d3131}
+#fleet .vessel-metrics strong{color:#fff}
+#fleet .vessel-metrics span{color:rgba(255,255,255,.76)}
+#fleet{background:var(--navy);color:#fff}
+#fleet .section-intro .kicker,#fleet .vessel-copy .kicker{color:rgba(255,255,255,.75)}
+#fleet .section-intro h2{color:#fff}
+#fleet .section-intro>p:last-child{color:rgba(255,255,255,.82)}
+#fleet .vessel-tabs{border:1px solid rgba(255,255,255,.48);background:transparent}
+#fleet .vessel-tabs button{color:rgba(255,255,255,.68)}
+#fleet .vessel-tabs button:hover,#fleet .vessel-tabs button:focus-visible{color:#fff}
+#fleet .vessel-tabs button.active{background:#fff;color:var(--ink)}
+#fleet .vessel-copy h3{color:#fff}
+#fleet .vessel-copy>p:not(.kicker){color:rgba(255,255,255,.78)}
+#fleet .vessel-metrics>div,#fleet .vessel-metrics>div:nth-child(2){padding:24px 22px;background:var(--sidebar);color:#fff}
+#fleet .vessel-metrics strong{color:#fff}
+#fleet .vessel-metrics span{color:rgba(255,255,255,.76)}
+#fleet .text-button{border-color:rgba(255,255,255,.7);color:#fff}
+@media(max-width:900px){#fleet .vessel-panel{grid-template-columns:1fr;gap:28px}#fleet .ship-illustration img{height:min(62vw,430px)}#fleet .vessel-copy{padding:15px 0 50px}}
+@media(max-width:600px){#fleet .vessel-tabs{display:grid;width:100%;grid-template-columns:repeat(3,1fr)}#fleet .vessel-tabs button{min-width:0;padding:10px 8px}#fleet .ship-illustration{border-radius:30px}#fleet .ship-illustration img{height:64vw}}
 #programme .stat-strip{
   width:100%;
   max-width:518px;
