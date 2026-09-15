@@ -15,7 +15,7 @@ timeline.addEventListener('click',event=>{
   if(!campaign)return;
   openCampaign(campaign.id);
 });
-programme.forEach(v=>{const row=document.createElement('div');const scienceDays=v.segments.reduce((total,[activity,days])=>total+(activity==='Science'?days:0),0);row.className='timeline-row';row.innerHTML=`<div class="timeline-name"><strong>${v.name}</strong><small><span class="active-days">${v.days} active days</span><span class="day-separator">·</span><span class="science-days">${scienceDays} science days</span></small><img class="timeline-ship-silhouette" src="${v.silhouette}" alt="" aria-hidden="true"></div><div class="timeline-track">${v.segments.map(([n,d])=>`<button class="timeline-segment" style="width:${d/v.days*100}%;background:${activityColors[n]}" data-label="${n} · ${d} days" aria-label="${n}, ${d} days"></button>`).join('')}</div>`;timeline.append(row)});
+programme.forEach(v=>{const row=document.createElement('div');const scienceDays=v.segments.reduce((total,[activity,days])=>total+(activity==='Science'?days:0),0);row.className='timeline-row';row.innerHTML=`<div class="timeline-name"><strong>${v.name}</strong><img class="timeline-ship-silhouette" src="${v.silhouette}" alt="" aria-hidden="true"><small><span class="active-days">${v.days} active days</span><span class="day-separator">·</span><span class="science-days">${scienceDays} science days</span></small></div><div class="timeline-track">${v.segments.map(([n,d])=>`<button class="timeline-segment" style="width:${d/v.days*100}%;background:${activityColors[n]}" data-label="${n} · ${d} days" aria-label="${n}, ${d} days"></button>`).join('')}</div>`;timeline.append(row)});
 document.querySelector('#timeline-legend').innerHTML=Object.entries(activityColors).map(([n,c])=>`<span><i style="background:${c}"></i>${n}</span>`).join('');
 
 const emissions=[{name:'Vessel operations',value:15356,pct:72,color:'#39aa90'},{name:'Freight movements',value:3412,pct:16,color:'#f3b547'},{name:'Crew travel',value:2560,pct:12,color:'#d74400'}];
@@ -52,7 +52,7 @@ donut.addEventListener('click',event=>{if(!event.target.classList.contains('pie-
 const vesselYearRange=document.querySelector('#vessel-year-range');
 const vesselYearControl=document.querySelector('.vessel-year-control');
 const vesselYearTooltip=document.querySelector('#vessel-year-tooltip');
-let vesselYearTimer=null;
+let vesselYearFrame=null,vesselYearPreviousTime=null;
 const routeVessels=[
   {route:document.querySelector('#discovery-route'),ship:document.querySelector('#discovery-ship'),offset:0},
   {route:document.querySelector('#cook-route'),ship:document.querySelector('#cook-ship'),offset:.08},
@@ -68,12 +68,25 @@ function updateVesselPositions(){
   });
   const date=new Date(Date.UTC(2025,0,1+day));
   vesselYearTooltip.textContent=new Intl.DateTimeFormat('en-GB',{month:'long',year:'numeric',timeZone:'UTC'}).format(date);
+  vesselYearRange.style.setProperty('--range-progress',`${progress*100}%`);
   vesselYearControl.style.setProperty('--tooltip-position',`${Math.max(3,Math.min(97,progress*100))}%`);
 }
 vesselYearRange.addEventListener('input',updateVesselPositions);
 function setVesselAutoplay(playing){
-  if(vesselYearTimer){clearInterval(vesselYearTimer);vesselYearTimer=null}
-  if(playing)vesselYearTimer=setInterval(()=>{vesselYearRange.value=(Number(vesselYearRange.value)+1)%365;updateVesselPositions()},70);
+  if(vesselYearFrame){cancelAnimationFrame(vesselYearFrame);vesselYearFrame=null}
+  vesselYearPreviousTime=null;
+  if(!playing)return;
+  const animate=time=>{
+    if(vesselYearPreviousTime!==null){
+      const elapsed=Math.min(50,time-vesselYearPreviousTime);
+      const nextValue=Number(vesselYearRange.value)+elapsed/70;
+      vesselYearRange.value=nextValue>=364?nextValue-364:nextValue;
+      updateVesselPositions();
+    }
+    vesselYearPreviousTime=time;
+    vesselYearFrame=requestAnimationFrame(animate);
+  };
+  vesselYearFrame=requestAnimationFrame(animate);
 }
 vesselYearRange.addEventListener('pointerdown',()=>{setVesselAutoplay(false);vesselYearControl.classList.add('dragging')});
 vesselYearRange.addEventListener('pointerup',()=>{vesselYearControl.classList.remove('dragging');setVesselAutoplay(true)});
@@ -92,7 +105,10 @@ const tabs=document.querySelector('.vessel-tabs');
 function showVessel(i){const v=vessels[i],image=document.querySelector('#vessel-image');document.querySelectorAll('.vessel-tabs button').forEach((b,j)=>b.classList.toggle('active',i===j));document.querySelector('#vessel-type').textContent=v.type;document.querySelector('#vessel-name').textContent=v.name;document.querySelector('#vessel-description').textContent=v.description;document.querySelector('#vessel-metrics').innerHTML=`<div><strong>${v.days}</strong><span>ACTIVE DAYS</span></div><div><strong>${v.science}</strong><span>SCIENCE DAYS</span></div><div><strong>${v.emissions}</strong><span>T CO₂E</span></div>`;image.src=v.image;image.alt=v.alt;document.querySelector('#vessel-more').onclick=()=>openPopover(v)}
 vessels.forEach((v,i)=>{const b=document.createElement('button');b.textContent=v.name.replace('RRS ','');b.setAttribute('role','tab');b.onclick=()=>showVessel(i);tabs.append(b)});showVessel(0);
 const popover=document.querySelector('#popover'),backdrop=document.querySelector('#popover-backdrop');
-document.querySelectorAll('[data-campaign]').forEach(button=>button.addEventListener('click',()=>openCampaign(button.dataset.campaign)));
+document.querySelectorAll('[data-campaign]').forEach(card=>{
+  card.addEventListener('click',()=>openCampaign(card.dataset.campaign));
+  card.addEventListener('keydown',event=>{if(event.key==='Enter'||event.key===' '){event.preventDefault();openCampaign(card.dataset.campaign)}});
+});
 function openCampaign(id){
   const template=document.getElementById(id),card=template.closest('article');
   openPopover({name:card.querySelector('h4').textContent,detail:card.querySelector('h4 + p').textContent,ports:'',missions:'',utilisation:''});

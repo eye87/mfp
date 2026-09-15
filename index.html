@@ -15,14 +15,6 @@
     <a class="brand" href="#overview" aria-label="Marine Facilities Planning home">
       <img src="icon-marine-research.svg" alt="" width="50" height="50" aria-hidden="true">
     </a>
-    <div class="period">
-      <label for="reporting-period">Reporting period</label>
-      <select id="reporting-period" aria-label="Select reporting period">
-        <option value="2024-25" selected>2024-25</option>
-        <option value="2023-24">2023-24</option>
-        <option value="2022-23">2022-23</option>
-      </select>
-    </div>
     <button class="menu-button" type="button" aria-label="Open chapter navigation" aria-expanded="false"><span></span><span></span></button>
   </header>
 
@@ -35,6 +27,14 @@
       <li><a href="#fleet"><i></i><span>Fleet</span></a></li>
     </ol>
     <div class="nav-progress"><span id="page-progress"></span></div>
+    <div class="period">
+      <label for="reporting-period">Reporting period</label>
+      <select id="reporting-period" aria-label="Select reporting period">
+        <option value="2024-25" selected>2024-25</option>
+        <option value="2023-24">2023-24</option>
+        <option value="2022-23">2022-23</option>
+      </select>
+    </div>
   </aside>
 
   <main>
@@ -68,36 +68,36 @@
       <div class="research-stories reveal">
         <h3>What we studied</h3>
         <div class="research-cards">
-          <article>
+          <article class="research-card" role="button" tabindex="0" data-campaign="campaign-discovery" aria-haspopup="dialog" aria-label="Explore the campaign Tracking North Atlantic carbon">
             <figure class="research-image"><img src="assets/research/north-atlantic-ctd.jpg" alt="A CTD rosette being deployed from a research vessel"></figure>
             <p class="kicker">RRS Discovery · North Atlantic</p>
             <h4>Tracking North Atlantic carbon</h4>
             <p>Water sampling and ocean profiles to investigate how carbon is distributed through the water column.</p>
-            <button class="campaign-button text-button" type="button" data-campaign="campaign-discovery" aria-haspopup="dialog">Explore the campaign <span aria-hidden="true">↗</span></button>
+            <span class="campaign-button text-button" aria-hidden="true">Explore the campaign <span>↗</span></span>
             <template id="campaign-discovery"><div>
               <h5>Research question</h5><p>How does the distribution of dissolved carbon vary with depth and between water masses?</p>
               <h5>Work at sea</h5><p>Collect water samples at a series of stations and measure temperature, salinity and dissolved carbon through the water column.</p>
               <h5>Illustrative outputs</h5><p>A set of ocean profiles and water samples for laboratory analysis, supporting comparisons between sampling locations.</p>
             </div></template>
           </article>
-          <article>
+          <article class="research-card" role="button" tabindex="0" data-campaign="campaign-cook" aria-haspopup="dialog" aria-label="Explore the campaign Mapping life in the deep ocean">
             <figure class="research-image"><img src="assets/research/deep-ocean-corals.jpg" alt="Deep-sea corals growing on the seafloor at Wagner Seamount"></figure>
             <p class="kicker">RRS James Cook · Deep ocean</p>
             <h4>Mapping life in the deep ocean</h4>
             <p>Seafloor mapping, camera surveys and sediment sampling to explore deep-sea habitats.</p>
-            <button class="campaign-button text-button" type="button" data-campaign="campaign-cook" aria-haspopup="dialog">Explore the campaign <span aria-hidden="true">↗</span></button>
+            <span class="campaign-button text-button" aria-hidden="true">Explore the campaign <span>↗</span></span>
             <template id="campaign-cook"><div>
               <h5>Research question</h5><p>How do seafloor features relate to the habitats and communities observed in the deep ocean?</p>
               <h5>Work at sea</h5><p>Map the seabed, record camera transects and collect sediment samples across contrasting survey sites.</p>
               <h5>Illustrative outputs</h5><p>Bathymetric maps, georeferenced imagery and sediment samples for subsequent habitat analysis.</p>
             </div></template>
           </article>
-          <article>
+          <article class="research-card" role="button" tabindex="0" data-campaign="campaign-sda" aria-haspopup="dialog" aria-label="Explore the campaign Observing a changing polar ocean">
             <figure class="research-image"><img src="assets/research/polar-sea-ice.jpg" alt="Sea ice across the Chukchi Sea during an Arctic ocean research mission"></figure>
             <p class="kicker">RRS Sir David Attenborough · Polar waters</p>
             <h4>Observing a changing polar ocean</h4>
             <p>Ocean measurements and biological sampling to investigate the relationship between meltwater, ocean conditions and plankton.</p>
-            <button class="campaign-button text-button" type="button" data-campaign="campaign-sda" aria-haspopup="dialog">Explore the campaign <span aria-hidden="true">↗</span></button>
+            <span class="campaign-button text-button" aria-hidden="true">Explore the campaign <span>↗</span></span>
             <template id="campaign-sda"><div>
               <h5>Research question</h5><p>How do plankton communities and ocean conditions vary across waters influenced by meltwater?</p>
               <h5>Work at sea</h5><p>Measure temperature and salinity along survey transects and collect water and plankton samples at selected stations.</p>
@@ -142,23 +142,23 @@
           <rect class="ocean-grid" width="1200" height="600" fill="url(#ocean-grid)"/>
           <image class="world-map-detail" href="assets/maps/world-map.svg" x="30" y="30" width="1140" height="540" preserveAspectRatio="xMidYMid meet"/>
           <g class="fleet-routes">
-            <path class="vessel-route route-future discovery-route" d="M545 150C520 160 490 165 460 175C420 190 380 210 350 235C390 255 435 270 480 270C510 255 525 220 510 195C495 180 520 165 545 150"/>
-            <path class="vessel-route route-progress discovery-route" id="discovery-route" d="M545 150C520 160 490 165 460 175C420 190 380 210 350 235C390 255 435 270 480 270C510 255 525 220 510 195C495 180 520 165 545 150"/>
-            <path class="vessel-route route-future cook-route" d="M545 150C520 185 500 230 485 285C470 350 485 420 540 470C600 520 690 540 760 505C820 475 880 430 930 380C955 355 975 342 990 345C955 370 910 395 865 420C815 450 780 480 740 500C670 530 595 505 540 460C500 415 480 350 490 290C500 230 520 180 545 150"/>
-            <path class="vessel-route route-progress cook-route" id="cook-route" d="M545 150C520 185 500 230 485 285C470 350 485 420 540 470C600 520 690 540 760 505C820 475 880 430 930 380C955 355 975 342 990 345C955 370 910 395 865 420C815 450 780 480 740 500C670 530 595 505 540 460C500 415 480 350 490 290C500 230 520 180 545 150"/>
-            <path class="vessel-route route-future sda-route" d="M545 150C515 195 485 255 460 320C435 385 410 445 382 492C420 525 500 548 585 552C690 558 805 548 900 515C840 495 780 478 720 472C650 465 590 485 535 520C480 510 425 500 382 472C405 405 435 335 465 270C490 215 520 170 545 150"/>
-            <path class="vessel-route route-progress sda-route" id="sda-route" d="M545 150C515 195 485 255 460 320C435 385 410 445 382 492C420 525 500 548 585 552C690 558 805 548 900 515C840 495 780 478 720 472C650 465 590 485 535 520C480 510 425 500 382 472C405 405 435 335 465 270C490 215 520 170 545 150"/>
+            <path class="vessel-route route-future discovery-route" d="M495 150L400.67145362781775 198.51182384855088Q390 204 380.4885121307448 211.3165291301963L360.5114878692552 226.6834708698037Q351 234 362.19081717928907 238.33192923069254L432.80918282071093 265.66807076930746Q444 270 448.69368768413824 258.9560289784983L495 150"/>
+            <path class="vessel-route route-progress discovery-route" id="discovery-route" d="M495 150L400.67145362781775 198.51182384855088Q390 204 380.4885121307448 211.3165291301963L360.5114878692552 226.6834708698037Q351 234 362.19081717928907 238.33192923069254L432.80918282071093 265.66807076930746Q444 270 448.69368768413824 258.9560289784983L495 150"/>
+            <path class="vessel-route route-future cook-route" d="M495 150L464.06552789495055 234.36674210468036Q462 240 461.6476678682912 245.98964623905L459.70466426341767 279.0207075219Q459 291 460.111480427154 302.94841459190525L469.888519572846 408.05158540809475Q471 420 480.6295480913536 427.1604331961347L587.5486149332178 506.66435469393116Q588 507 588.5625 507L605.9912109375 507Q606 507 606.0087890625 507L657 507Q669 507 679.9041221275597 501.98999794139144L769.0958778724403 461.01000205860856Q780 456 791.2906489424247 451.9353663807271L918.7093510575753 406.0646336192729Q930 402 919.4537588200117 407.72510235485083L835.5462411799883 453.27489764514917Q825 459 813.7998527255633 463.3077489517064L680.2001472744367 514.6922510482935Q669 519 657.114092721867 517.3491795447037L572.885907278133 505.65082045529624Q561 504 550.3533983851848 498.46376716029613L496.64660161481515 470.53623283970387Q486 465 482.12227376050186 453.64380172718404L445.6257861505598 346.76123086949667Q444 342 441.75 337.5L437.25 328.5Q435 324 436.56337471339634 319.21791264137585L484.43662528660366 172.78208735862415Q486 168 488.25 163.5L495 150"/>
+            <path class="vessel-route route-progress cook-route" id="cook-route" d="M495 150L464.06552789495055 234.36674210468036Q462 240 461.6476678682912 245.98964623905L459.70466426341767 279.0207075219Q459 291 460.111480427154 302.94841459190525L469.888519572846 408.05158540809475Q471 420 480.6295480913536 427.1604331961347L587.5486149332178 506.66435469393116Q588 507 588.5625 507L605.9912109375 507Q606 507 606.0087890625 507L657 507Q669 507 679.9041221275597 501.98999794139144L769.0958778724403 461.01000205860856Q780 456 791.2906489424247 451.9353663807271L918.7093510575753 406.0646336192729Q930 402 919.4537588200117 407.72510235485083L835.5462411799883 453.27489764514917Q825 459 813.7998527255633 463.3077489517064L680.2001472744367 514.6922510482935Q669 519 657.114092721867 517.3491795447037L572.885907278133 505.65082045529624Q561 504 550.3533983851848 498.46376716029613L496.64660161481515 470.53623283970387Q486 465 482.12227376050186 453.64380172718404L445.6257861505598 346.76123086949667Q444 342 441.75 337.5L437.25 328.5Q435 324 436.56337471339634 319.21791264137585L484.43662528660366 172.78208735862415Q486 168 488.25 163.5L495 150"/>
+            <path class="vessel-route route-future sda-route" d="M495 150L464.06552789495055 234.36674210468036Q462 240 461.73937665434215 245.99433695013036L459.1456928793536 305.64906377486744Q459 309 460.5 312L463.5 318Q465 321 464.272393124891 324.2742309379905L441.727606875109 425.7257690620095Q441 429 439.5 432L436.5 438Q435 441 433.7543178021939 444.11420549451526L430.5 452.25Q429 456 426.62444885484587 459.26638282458697L411 480.75Q405 489 414.458889376417 492.81993609432226L549.8730979547047 547.5064434047846Q561 552 572.9432956071074 550.8348004285749L918.0567043928926 517.1651995714251Q930 516 918.0414509010615 515.0034542417551L761.9585490989385 501.9965457582449Q750 501 738.0841407096607 502.41855467742135L635.9158592903393 514.5814453225787Q624 516 612.0492815223876 517.0864289525102L470.95071847761244 529.9135710474898Q459 531 449.52777339148406 523.632712637821L414.3605658113007 496.2804400754561Q405 489 411.75 479.25L428.625 454.875Q432 450 433.70376337354327 444.3207887548558L448.27591268660194 395.7469577113269Q450 390 450.5066584601171 384.02143017061843L463.98668307976584 224.95713965876317Q465 213 470.1592029647082 202.16567377411283L495 150"/>
+            <path class="vessel-route route-progress sda-route" id="sda-route" d="M495 150L464.06552789495055 234.36674210468036Q462 240 461.73937665434215 245.99433695013036L459.1456928793536 305.64906377486744Q459 309 460.5 312L463.5 318Q465 321 464.272393124891 324.2742309379905L441.727606875109 425.7257690620095Q441 429 439.5 432L436.5 438Q435 441 433.7543178021939 444.11420549451526L430.5 452.25Q429 456 426.62444885484587 459.26638282458697L411 480.75Q405 489 414.458889376417 492.81993609432226L549.8730979547047 547.5064434047846Q561 552 572.9432956071074 550.8348004285749L918.0567043928926 517.1651995714251Q930 516 918.0414509010615 515.0034542417551L761.9585490989385 501.9965457582449Q750 501 738.0841407096607 502.41855467742135L635.9158592903393 514.5814453225787Q624 516 612.0492815223876 517.0864289525102L470.95071847761244 529.9135710474898Q459 531 449.52777339148406 523.632712637821L414.3605658113007 496.2804400754561Q405 489 411.75 479.25L428.625 454.875Q432 450 433.70376337354327 444.3207887548558L448.27591268660194 395.7469577113269Q450 390 450.5066584601171 384.02143017061843L463.98668307976584 224.95713965876317Q465 213 470.1592029647082 202.16567377411283L495 150"/>
           </g>
+          <g class="route-stops discovery-stops"><circle cx="351" cy="234" r="5"/><circle class="port" cx="444" cy="270" r="5"/></g>
+          <g class="route-stops cook-stops"><circle cx="471" cy="420" r="5"/><circle class="port" cx="606" cy="507" r="5"/><circle class="port" cx="930" cy="402" r="5"/></g>
+          <g class="route-stops sda-stops"><circle class="port" cx="405" cy="489" r="5"/><circle cx="561" cy="552" r="5"/><circle class="port" cx="930" cy="516" r="5"/></g>
+          <g class="shared-port-stop"><circle cx="495" cy="150" r="5"/></g>
           <g class="ship discovery-ship" id="discovery-ship"><use href="#ship-marker"/></g>
           <g class="ship cook-ship" id="cook-ship"><use href="#ship-marker"/></g>
           <g class="ship sda-ship" id="sda-ship"><use href="#ship-marker"/></g>
-          <image class="world-map-mask" href="assets/maps/world-map.svg" x="30" y="30" width="1140" height="540" preserveAspectRatio="xMidYMid meet"/>
-          <g class="route-stops discovery-stops"><circle cx="545" cy="150" r="5"/><circle cx="350" cy="235" r="5"/><circle cx="480" cy="270" r="5"/></g>
-          <g class="route-stops cook-stops"><circle cx="545" cy="150" r="5"/><circle cx="485" cy="285" r="5"/><circle cx="540" cy="470" r="5"/><circle cx="760" cy="505" r="5"/><circle cx="930" cy="380" r="5"/><circle cx="990" cy="345" r="5"/></g>
-          <g class="route-stops sda-stops"><circle cx="545" cy="150" r="5"/><circle cx="382" cy="492" r="5"/><circle cx="585" cy="552" r="5"/><circle cx="900" cy="515" r="5"/></g>
         </svg>
         <div class="vessel-year-control">
-          <input id="vessel-year-range" type="range" min="0" max="364" value="181" step="1" aria-label="Move through the reporting year">
+          <input id="vessel-year-range" type="range" min="0" max="364" value="181" step="0.1" aria-label="Move through the reporting year">
           <output class="vessel-year-tooltip" id="vessel-year-tooltip" for="vessel-year-range">July 2025</output>
         </div>
       </div>
@@ -172,7 +172,7 @@
         <figure class="ship-illustration"><img id="vessel-image" src="assets/vessels/rrs-discovery-generated.png" alt="Illustrative representation of RRS Discovery at sea"></figure>
         <div class="vessel-copy"><p class="kicker" id="vessel-type"></p><h3 id="vessel-name"></h3><p id="vessel-description"></p><div class="vessel-metrics" id="vessel-metrics"></div><button class="text-button" id="vessel-more" type="button">View vessel detail <span>↗</span></button></div>
       </div>
-      <footer><div class="brand footer-brand"><img src="icon-marine-research.svg" alt="" width="50" height="50" aria-hidden="true"></div><a href="#overview">Back to top ↑</a></footer>
+      <footer><div class="brand footer-brand"><img src="icon-marine-research.svg" alt="" width="50" height="50" aria-hidden="true"></div><a href="#overview"><span>Back to top</span><i aria-hidden="true">↑</i></a></footer>
     </section>
   </main>
 

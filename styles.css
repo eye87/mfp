@@ -161,8 +161,9 @@ body:before{content:"";position:fixed;z-index:20;top:0;bottom:0;left:0;width:255
 #logistics .segmented button.active{background:var(--ink);color:#fff}
 #logistics .segmented button:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
 #logistics .map-controls>p{font:400 12px/1.5 var(--sans);color:var(--ink)}
-#logistics .world-map{margin-top:-100px;padding:0;border-radius:44px;background:transparent;overflow:hidden}
-#logistics .world-map svg{display:block;border-radius:44px;background:#dce9e5}
+#logistics .world-map{margin-top:-100px;padding:0 0 80px;border-radius:44px;background:var(--paper);overflow:hidden}
+#logistics .world-map svg{display:block;border-radius:44px 44px 0 0;background:var(--paper)}
+#logistics .ocean-grid{display:none}
 #logistics .world-map-detail{opacity:.88}
 #logistics .world-map-mask{opacity:1;pointer-events:none}
 #logistics .land{fill:#c3cec5;stroke:#aebdb2;stroke-width:1.2}
@@ -173,20 +174,25 @@ body:before{content:"";position:fixed;z-index:20;top:0;bottom:0;left:0;width:255
 #logistics .discovery-route{stroke:#39aa90}
 #logistics .cook-route{stroke:#d74400}
 #logistics .sda-route{stroke:#052b2b}
-#logistics .ship{filter:drop-shadow(0 4px 5px rgba(16,42,43,.2))}
+#logistics .ship{filter:drop-shadow(0 4px 5px rgba(16,42,43,.2));will-change:transform}
 #logistics .discovery-ship{fill:#39aa90}
 #logistics .cook-ship{fill:#d74400}
 #logistics .sda-ship{fill:#052b2b}
-#logistics .route-stops circle{stroke:#dce9e5;stroke-width:2}
+#logistics .route-stops circle{stroke:var(--paper);stroke-width:2}
+#logistics .route-stops .port{fill:var(--paper);stroke-width:3}
+#logistics .discovery-stops .port{stroke:#39aa90}
+#logistics .cook-stops .port{stroke:#d74400}
+#logistics .sda-stops .port{stroke:#052b2b}
 #logistics .discovery-stops{fill:#39aa90}
 #logistics .cook-stops{fill:#d74400}
 #logistics .sda-stops{fill:#052b2b}
+#logistics .shared-port-stop circle{fill:var(--paper);stroke:var(--ink);stroke-width:3}
 #logistics .route-labels{font:500 11px/1 var(--mono);letter-spacing:.04em;text-transform:uppercase;fill:var(--ink)}
 #logistics .route-labels line{stroke-width:4;stroke-linecap:round}
 #logistics .discovery-key{stroke:#39aa90}
 #logistics .cook-key{stroke:#d74400}
 #logistics .sda-key{stroke:#052b2b}
-#logistics .vessel-year-control{position:absolute;z-index:4;right:30px;bottom:30px;left:30px;display:flex;align-items:center;height:34px;margin:0;padding:0 16px;border:1px solid rgba(255,255,255,.3);border-radius:24px;background:rgba(246,244,238,.58);box-shadow:0 5px 15px rgba(16,42,43,.05);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
+#logistics .vessel-year-control{position:absolute;z-index:4;right:30px;bottom:30px;left:30px;display:flex;align-items:center;height:34px;margin:0;padding:0 16px;border:1px solid rgba(255,255,255,.72);border-radius:24px;background:rgba(255,255,255,.86);box-shadow:0 5px 15px rgba(16,42,43,.05);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
 #logistics .vessel-year-heading{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;color:var(--ink)}
 #logistics .vessel-year-heading label{font:500 9px/1.3 var(--mono);letter-spacing:.06em;text-transform:uppercase}
 #logistics .vessel-year-actions{display:flex;align-items:center;gap:7px}
@@ -194,9 +200,9 @@ body:before{content:"";position:fixed;z-index:20;top:0;bottom:0;left:0;width:255
 #logistics .vessel-year-heading button{border:1px solid rgba(5,43,43,.2);background:rgba(255,255,255,.4);color:var(--ink);cursor:pointer}
 #logistics .vessel-year-heading button:hover,#logistics .vessel-year-heading button[aria-pressed="true"]{background:rgba(5,43,43,.88);color:#fff}
 #logistics .vessel-year-heading output{background:rgba(5,43,43,.82);color:#fff}
-#logistics #vessel-year-range{display:block;width:100%;height:3px;margin:0;border-radius:999px;background:rgba(16,42,43,.16);accent-color:#d74400}
-#logistics #vessel-year-range::-webkit-slider-thumb{width:16px;height:16px;background:#d74400;box-shadow:0 0 0 3px rgba(255,255,255,.9)}
-#logistics #vessel-year-range::-moz-range-thumb{width:16px;height:16px;border:3px solid rgba(255,255,255,.9);background:#d74400;box-sizing:content-box}
+#logistics #vessel-year-range{display:block;width:100%;height:3px;margin:0;border-radius:999px;background:linear-gradient(to right,rgba(16,42,43,.62) 0 var(--range-progress,50%),rgba(16,42,43,.16) var(--range-progress,50%) 100%);accent-color:var(--ink)}
+#logistics #vessel-year-range::-webkit-slider-thumb{width:16px;height:16px;background:var(--ink);box-shadow:0 0 0 3px rgba(255,255,255,.9)}
+#logistics #vessel-year-range::-moz-range-thumb{width:16px;height:16px;border:3px solid rgba(255,255,255,.9);background:var(--ink);box-sizing:content-box}
 #logistics .vessel-year-tooltip{position:absolute;bottom:calc(100% + 12px);left:var(--tooltip-position,50%);min-width:112px;padding:11px 15px;border-radius:10px;background:var(--ink);color:#fff;opacity:0;pointer-events:none;transform:translateX(-50%) translateY(5px);text-align:center;font:500 12px/1.3 var(--mono);letter-spacing:.02em;box-shadow:0 10px 24px rgba(5,43,43,.16);transition:opacity .18s,transform .18s}
 #logistics .vessel-year-control.dragging .vessel-year-tooltip,#logistics #vessel-year-range:focus-visible+.vessel-year-tooltip{opacity:1;transform:translateX(-50%) translateY(0)}
 #logistics .fleet-route-legend{display:flex;justify-content:center;align-items:center;gap:32px;margin-top:30px;flex-wrap:wrap}
@@ -227,7 +233,7 @@ body:before{content:"";position:fixed;z-index:20;top:0;bottom:0;left:0;width:255
 #opportunities .scenario-result p b{font:400 32px/1.2 var(--serif)}
 #opportunities .scenario-result small{font-size:11px;line-height:1.6;color:rgba(255,255,255,.66)}
 #opportunities footer p{color:var(--muted)}
-@media(max-width:600px){#logistics .segmented{width:100%}#logistics .segmented button{flex:1;min-width:0;padding:10px 12px}#logistics .world-map{margin-top:-80px;padding:0;border-radius:32px}#logistics .world-map svg{border-radius:32px}#logistics .vessel-year-control{right:30px;bottom:30px;left:30px;height:30px;padding:0 12px;border-radius:20px}#logistics .fleet-route-legend{gap:16px;margin-top:22px}#logistics .network-stats{gap:8px}#logistics .network-stats>div{padding:20px 8px}#logistics .network-stats strong{font-size:32px}#logistics .network-stats span{font-size:8px}#opportunities .scenario-controls,#opportunities .scenario-result{padding:28px 22px;border-radius:32px}}
+@media(max-width:600px){#logistics .segmented{width:100%}#logistics .segmented button{flex:1;min-width:0;padding:10px 12px}#logistics .world-map{margin-top:-80px;padding:0 0 80px;border-radius:32px}#logistics .world-map svg{border-radius:32px 32px 0 0}#logistics .vessel-year-control{right:30px;bottom:30px;left:30px;height:30px;padding:0 12px;border-radius:20px}#logistics .fleet-route-legend{gap:16px;margin-top:22px}#logistics .network-stats{gap:8px}#logistics .network-stats>div{padding:20px 8px}#logistics .network-stats strong{font-size:32px}#logistics .network-stats span{font-size:8px}#opportunities .scenario-controls,#opportunities .scenario-result{padding:28px 22px;border-radius:32px}}
 #logistics .section-intro,#opportunities .section-intro{max-width:720px;margin-left:0;margin-right:auto;text-align:left}
 #logistics .section-intro .kicker,#opportunities .section-intro .kicker{color:var(--ink);transform:translateY(-5px)}
 #logistics .section-intro h2,#opportunities .section-intro h2{color:var(--ink);font:400 80px/1.05 var(--serif);letter-spacing:-.055em}
@@ -241,7 +247,7 @@ body:before{content:"";position:fixed;z-index:20;top:0;bottom:0;left:0;width:255
 #fleet .vessel-tabs button{flex:0 0 auto;min-width:128px;padding:11px 20px;border:0;border-radius:999px;text-align:center;color:rgba(255,255,255,.68);transition:background-color .3s ease,color .3s ease}
 #fleet .vessel-tabs button:hover,#fleet .vessel-tabs button:focus-visible{color:#fff;outline:none}
 #fleet .vessel-tabs button.active{border:0;background:#fff;color:var(--ink)}
-#fleet .vessel-panel{grid-template-columns:minmax(0,1.05fr) minmax(340px,.75fr);align-items:start;gap:clamp(44px,6vw,84px);max-width:1180px;min-height:0;margin-top:25px}
+#fleet .vessel-panel{grid-template-columns:minmax(0,1.05fr) minmax(340px,.75fr);align-items:start;gap:clamp(44px,6vw,84px);max-width:1180px;min-height:0;margin-top:35px}
 #fleet .ship-illustration{position:relative;margin:0;overflow:hidden;border-radius:44px;background:var(--paper)}
 #fleet .ship-illustration img{display:block;width:100%;height:423px;object-fit:cover;transition:opacity .3s ease,transform .7s cubic-bezier(.16,.82,.18,1)}
 #fleet .ship-illustration:hover img{transform:scale(1.025)}
@@ -275,12 +281,14 @@ body:before{content:"";position:fixed;z-index:20;top:0;bottom:0;left:0;width:255
 .research-stories>h3{margin:0;font:400 39px/1.15 var(--serif)}
 .research-notice{max-width:650px;margin:16px 0 32px;color:var(--muted);font-size:13px;line-height:1.7}
 .research-cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:44px;align-items:stretch;margin-top:32px}
-.research-cards article{display:flex;flex-direction:column;padding:0 32px 44px;border-radius:32px;background:var(--navy);color:#fff;min-width:0;overflow:hidden}
+.research-cards article{display:flex;flex-direction:column;padding:0 32px 44px;border-radius:32px;background:var(--navy);color:#fff;min-width:0;overflow:hidden;cursor:pointer;transition:background-color .3s ease,box-shadow .3s ease,transform .3s ease}
+.research-cards article:hover,.research-cards article:focus-visible{background:#d74400;box-shadow:0 22px 48px rgba(16,42,43,.2);transform:translateY(-4px);outline:none}
+.research-cards article:focus-visible{box-shadow:0 0 0 3px var(--paper),0 0 0 6px #d74400,0 22px 48px rgba(16,42,43,.2)}
 .research-image{position:relative;height:190px;margin:0 -32px 26px;overflow:hidden;background:var(--sidebar)}
 .research-image img{display:block;width:100%;height:100%;object-fit:cover;transition:transform .7s cubic-bezier(.16,1,.3,1)}
 .research-cards article:hover .research-image img{transform:scale(1.035)}
 .research-cards p.kicker{margin:0;color:rgba(255,255,255,.72);font:500 10px/1.3 var(--mono);letter-spacing:.16em;text-transform:uppercase;min-height:32px}
-.research-cards .campaign-button{align-self:flex-start;margin-top:auto;padding-top:24px;border-color:rgba(255,255,255,.7);color:#fff;text-align:left}
+.research-cards .campaign-button{display:inline-block;align-self:flex-start;margin-top:auto;padding-top:24px;border-color:rgba(255,255,255,.7);color:#fff;text-align:left}
 .campaign-content h5{margin:26px 0 10px;font:500 11px/1.5 var(--mono);text-transform:uppercase;letter-spacing:.04em}
 .campaign-content p{font-size:14px;line-height:1.75}
 .campaign-content small{display:block;margin-top:28px;color:var(--muted);line-height:1.6}
@@ -368,22 +376,22 @@ body:before{content:"";position:fixed;z-index:20;top:0;bottom:0;left:0;width:255
 #programme .programme-overview-stats div:nth-child(2),#programme .programme-overview-stats div:nth-child(3){border-radius:0;transform-origin:center}
 #programme .programme-overview-stats div:nth-child(4){border-radius:0 44px 44px 0;transform-origin:0 50%}
 #programme .research-stories{margin-top:120px}
-.vessel-time-feature{margin-bottom:14vh;padding:clamp(36px,5vw,72px);border-radius:44px;background:var(--paper)}
+.vessel-time-feature{margin-bottom:14vh;padding:0;background:transparent}
 .vessel-time-feature .programme-copy{max-width:760px;margin:0 auto 38px;text-align:center}
 .vessel-time-feature .programme-copy h3{margin:0;font:400 52px/1.05 var(--serif);letter-spacing:-.035em;text-align:center}
 .vessel-time-feature .programme-copy p{max-width:610px;margin:16px auto 0;color:rgba(16,42,43,.72);font-size:15px;line-height:1.75;text-align:center}
-.vessel-time-feature .timeline-card{display:flex;width:100%;min-height:390px;flex-direction:column;justify-content:center;padding:38px 42px;border-radius:32px;background:#fff}
-.vessel-time-feature .timeline-row{grid-template-columns:1fr;gap:15px;margin:24px 0}
-.vessel-time-feature .timeline-row+.timeline-row{margin-top:40px}
-.vessel-time-feature .timeline-name{display:flex;align-items:flex-end;gap:40px;min-height:45px;white-space:nowrap}
+.vessel-time-feature .timeline-card{display:flex;width:100%;min-height:390px;flex-direction:column;justify-content:center;padding:clamp(38px,4.5vw,64px);border-radius:44px;background:var(--paper)}
+.vessel-time-feature .timeline-row{grid-template-columns:1fr;gap:20px;margin:24px 0;padding-bottom:10px}
+.vessel-time-feature .timeline-row+.timeline-row{margin-top:36px}
+.vessel-time-feature .timeline-name{display:flex;align-items:flex-end;gap:40px;min-height:36px;white-space:nowrap}
 .vessel-time-feature .timeline-name strong{color:var(--ink);font:500 20px/1.1 var(--serif);letter-spacing:-.015em}
-.vessel-time-feature .timeline-name small{display:flex;align-items:center;gap:8px;color:rgba(16,42,43,.68);font:400 12px/1.3 var(--mono);letter-spacing:.06em;text-transform:uppercase}
+.vessel-time-feature .timeline-name small{display:flex;align-items:center;gap:8px;margin-left:auto;color:rgba(16,42,43,.68);font:400 12px/1.3 var(--mono);letter-spacing:.06em;text-align:right;text-transform:uppercase}
 .vessel-time-feature .timeline-name small{position:static;transform:none}
 .vessel-time-feature .timeline-name .active-days{color:rgba(16,42,43,.82)}
 .vessel-time-feature .timeline-name .day-separator{color:rgba(16,42,43,.38)}
 .vessel-time-feature .timeline-name .science-days{color:#258c78}
 .vessel-time-feature .timeline-name small:before{display:none}
-.vessel-time-feature .timeline-ship-silhouette{display:block;width:clamp(105px,9vw,145px);height:45px;margin-left:auto;object-fit:contain;object-position:right bottom;flex:0 0 auto}
+.vessel-time-feature .timeline-ship-silhouette{display:block;width:clamp(92px,7.5vw,118px);height:36px;object-fit:contain;object-position:left bottom;flex:0 0 auto;transform:translateX(-10px)}
 .vessel-time-feature .timeline-track{height:42px}
 .vessel-time-feature .timeline-segment:first-child{border-radius:10px 2px 2px 10px}
 .vessel-time-feature .timeline-segment:last-child{border-radius:2px 10px 10px 2px}
@@ -394,19 +402,34 @@ body:before{content:"";position:fixed;z-index:20;top:0;bottom:0;left:0;width:255
 .vessel-time-feature .legend span{display:inline-flex;align-items:center;font-size:12px}
 .vessel-time-feature .legend i{width:15px;height:15px;margin-right:9px}
 @media(max-width:1100px){#programme .programme-overview-stats{width:85%}}
-@media(max-width:760px){#programme .programme-overview-stats{width:100%;margin-top:-20px;grid-template-columns:repeat(2,1fr)}#programme .programme-overview-stats div{min-height:124px}#programme .programme-overview-stats div:nth-child(1){border-radius:32px 0 0 0;transform-origin:100% 100%}#programme .programme-overview-stats div:nth-child(2){border-radius:0 32px 0 0;transform-origin:0 100%}#programme .programme-overview-stats div:nth-child(3){border-radius:0 0 0 32px;transform-origin:100% 0}#programme .programme-overview-stats div:nth-child(4){border-radius:0 0 32px 0;transform-origin:0 0}#programme .research-stories{margin-top:90px}.vessel-time-feature{padding:26px 18px;border-radius:32px}.vessel-time-feature .programme-copy{margin:0 8px 28px}.vessel-time-feature .programme-copy h3{font-size:39px}.vessel-time-feature .timeline-card{min-height:0;padding:22px 18px;border-radius:24px}.vessel-time-feature .timeline-track{height:34px}.vessel-time-feature .legend{gap:14px;justify-content:flex-start;flex-wrap:wrap}}
+@media(max-width:760px){#programme .programme-overview-stats{width:100%;margin-top:-20px;grid-template-columns:repeat(2,1fr)}#programme .programme-overview-stats div{min-height:124px}#programme .programme-overview-stats div:nth-child(1){border-radius:32px 0 0 0;transform-origin:100% 100%}#programme .programme-overview-stats div:nth-child(2){border-radius:0 32px 0 0;transform-origin:0 100%}#programme .programme-overview-stats div:nth-child(3){border-radius:0 0 0 32px;transform-origin:100% 0}#programme .programme-overview-stats div:nth-child(4){border-radius:0 0 32px 0;transform-origin:0 0}#programme .research-stories{margin-top:90px}.vessel-time-feature{padding:0}.vessel-time-feature .programme-copy{margin:0 8px 28px}.vessel-time-feature .programme-copy h3{font-size:39px}.vessel-time-feature .timeline-card{min-height:0;padding:22px 18px;border-radius:24px}.vessel-time-feature .timeline-track{height:34px}.vessel-time-feature .legend{gap:14px;justify-content:flex-start;flex-wrap:wrap}}
 @media(max-width:760px){#programme .programme-overview-stats{margin-top:-45px}.vessel-time-feature .programme-copy h3{font-size:39px}}
 
-@media(max-width:760px){.vessel-time-feature .timeline-name{align-items:flex-start;flex-direction:column;gap:7px;min-height:0;white-space:normal}.vessel-time-feature .timeline-name small{position:static;transform:none}.vessel-time-feature .timeline-name small:before{display:none}.vessel-time-feature .timeline-ship-silhouette{display:none}}
+@media(max-width:760px){.vessel-time-feature .timeline-name{align-items:flex-start;flex-direction:column;gap:7px;min-height:0;white-space:normal}.vessel-time-feature .timeline-name small{position:static;margin-left:0;transform:none;text-align:left}.vessel-time-feature .timeline-name small:before{display:none}.vessel-time-feature .timeline-ship-silhouette{display:none}}
 
-#fleet footer .footer-brand img{filter:brightness(0) invert(1)}
-#fleet footer>a{font-size:14px;font-weight:500}
+#fleet footer .footer-brand img{filter:none}
+#fleet footer>a{display:inline-flex;align-items:center;gap:9px;color:var(--ink);font-size:14px;font-weight:500}
+#fleet footer>a i{color:#d74400;font-style:normal;font-size:20px;line-height:1;transition:transform .25s cubic-bezier(.16,1,.3,1)}
+#fleet footer>a:hover i,#fleet footer>a:focus-visible i{transform:translateY(-5px)}
+
+/* Reporting period belongs to the chapter rail and is clickable as one control. */
+.chapter-nav .period{position:fixed;z-index:2;top:auto;right:auto;bottom:30px;left:32px;display:block;width:191px;min-width:0;height:62px;padding:0;border:1px solid rgba(255,255,255,.5);border-radius:16px;background:transparent;box-shadow:none;backdrop-filter:none;color:#fff;overflow:hidden;transition:border-color .25s ease}
+.chapter-nav .period label{position:absolute;z-index:3;top:9px;left:14px;color:rgba(255,255,255,.68);font:500 9px/1.2 var(--mono);letter-spacing:.14em;text-transform:uppercase;pointer-events:none}
+.chapter-nav .period select{position:absolute;z-index:2;inset:0;width:100%;height:100%;margin:0;padding:24px 42px 7px 14px;border:0;appearance:none;background:transparent;color:#fff;cursor:pointer;font:500 19px/1 var(--serif)}
+.chapter-nav .period select option{background:#fff;color:var(--ink);font:400 16px var(--sans)}
+.chapter-nav .period:after{content:"";position:absolute;z-index:3;top:50%;right:17px;width:8px;height:8px;border:0;border-right:2px solid #fff;border-bottom:2px solid #fff;transform:translateY(-65%) rotate(45deg);pointer-events:none}
+.chapter-nav .period:hover,.chapter-nav .period:focus-within{border-color:#fff}
+.chapter-nav .period:focus-within{outline:2px solid #fff;outline-offset:3px}
+@media(max-width:900px){.chapter-nav .period{position:relative;top:auto;right:auto;bottom:auto;left:auto;display:block;width:100%;height:62px;margin-top:auto}.chapter-nav .period select{display:block}}
+@media(min-width:901px){.chapter-nav{top:calc(50% - 135px);left:76px;transform:none}}
 
 /* Keep every level-three heading visually consistent across the report. */
 h3{font-size:43px!important}
 
 .hero .lede strong{font-weight:700;color:var(--ink)}
 .chapter-nav .nav-progress{height:180px}
-#fleet footer{border-top-color:rgba(255,255,255,.18)}
+#fleet footer{margin:14vh -7vw -14vh;padding:28px 7vw;border-top:0;background:var(--paper);color:var(--ink)}
 #fleet footer p{color:rgba(255,255,255,.66)}
-#fleet footer a{color:#fff}
+#fleet footer a{color:var(--ink)}
+@media(max-width:900px){#fleet footer{margin-bottom:-11vh}}
+@media(max-width:600px){#fleet footer{margin-right:-24px;margin-left:-24px;padding:24px}}
