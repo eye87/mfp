@@ -1,11 +1,21 @@
 const programme = [
-  {name:'RRS Discovery',days:341,segments:[['Science',160],['Passage',35],['Mobilisation',30],['Science',78],['Maintenance',38]]},
-  {name:'RRS James Cook',days:326,segments:[['Mobilisation',22],['Science',112],['Passage',49],['Science',104],['Maintenance',39]]},
-  {name:'RRS SDA',days:188,segments:[['Maintenance',44],['Science',61],['Passage',28],['Science',39],['Mobilisation',16]]}
+  {name:'RRS Discovery',days:341,silhouette:'assets/vessels/silhouette-discovery.svg',segments:[['Science',160],['Passage',35],['Mobilisation',30],['Science',78],['Maintenance',38]]},
+  {name:'RRS James Cook',days:326,silhouette:'assets/vessels/silhouette-james-cook.svg',segments:[['Mobilisation',22],['Science',112],['Passage',49],['Science',104],['Maintenance',39]]},
+  {name:'RRS SDA',days:188,silhouette:'assets/vessels/silhouette-sda.svg',segments:[['Maintenance',44],['Science',61],['Passage',28],['Science',39],['Mobilisation',16]]}
 ];
 const activityColors={Science:'#39aa90',Passage:'#f3b547',Mobilisation:'#d74400',Maintenance:'#052b2b'};
 const timeline=document.querySelector('#timeline');
-programme.forEach(v=>{const row=document.createElement('div');row.className='timeline-row';row.innerHTML=`<div class="timeline-name"><strong>${v.name}</strong><small>${v.days} active days</small></div><div class="timeline-track">${v.segments.map(([n,d])=>`<button class="timeline-segment" style="width:${d/v.days*100}%;background:${activityColors[n]}" data-label="${n} · ${d} days" aria-label="${n}, ${d} days"></button>`).join('')}</div>`;timeline.append(row)});
+const campaignIds=['campaign-discovery','campaign-cook','campaign-sda'];
+timeline.addEventListener('click',event=>{
+  const segment=event.target.closest('.timeline-segment');
+  if(!segment||!segment.dataset.label.startsWith('Science'))return;
+  const row=segment.closest('.timeline-row');
+  const index=Array.from(timeline.children).indexOf(row);
+  const campaign=document.getElementById(campaignIds[index]);
+  if(!campaign)return;
+  openCampaign(campaign.id);
+});
+programme.forEach(v=>{const row=document.createElement('div');const scienceDays=v.segments.reduce((total,[activity,days])=>total+(activity==='Science'?days:0),0);row.className='timeline-row';row.innerHTML=`<div class="timeline-name"><strong>${v.name}</strong><small><span class="active-days">${v.days} active days</span><span class="day-separator">·</span><span class="science-days">${scienceDays} science days</span></small><img class="timeline-ship-silhouette" src="${v.silhouette}" alt="" aria-hidden="true"></div><div class="timeline-track">${v.segments.map(([n,d])=>`<button class="timeline-segment" style="width:${d/v.days*100}%;background:${activityColors[n]}" data-label="${n} · ${d} days" aria-label="${n}, ${d} days"></button>`).join('')}</div>`;timeline.append(row)});
 document.querySelector('#timeline-legend').innerHTML=Object.entries(activityColors).map(([n,c])=>`<span><i style="background:${c}"></i>${n}</span>`).join('');
 
 const emissions=[{name:'Vessel operations',value:15356,pct:72,color:'#39aa90'},{name:'Freight movements',value:3412,pct:16,color:'#f3b547'},{name:'Crew travel',value:2560,pct:12,color:'#d74400'}];
@@ -39,28 +49,63 @@ emissions.forEach((emission,index)=>{
 });
 donut.addEventListener('click',event=>{if(!event.target.classList.contains('pie-slice'))resetEmissions()});
 
+const vesselYearRange=document.querySelector('#vessel-year-range');
+const vesselYearControl=document.querySelector('.vessel-year-control');
+const vesselYearTooltip=document.querySelector('#vessel-year-tooltip');
+let vesselYearTimer=null;
+const routeVessels=[
+  {route:document.querySelector('#discovery-route'),ship:document.querySelector('#discovery-ship'),offset:0},
+  {route:document.querySelector('#cook-route'),ship:document.querySelector('#cook-ship'),offset:.08},
+  {route:document.querySelector('#sda-route'),ship:document.querySelector('#sda-ship'),offset:.16}
+];
+function updateVesselPositions(){
+  const day=Number(vesselYearRange.value),progress=day/364;
+  routeVessels.forEach(({route,ship,offset})=>{
+    const length=route.getTotalLength(),position=(progress+offset)%1*length;
+    const point=route.getPointAtLength(position);
+    route.style.strokeDasharray=`${position} ${Math.max(0,length-position)}`;
+    ship.setAttribute('transform',`translate(${point.x} ${point.y})`);
+  });
+  const date=new Date(Date.UTC(2025,0,1+day));
+  vesselYearTooltip.textContent=new Intl.DateTimeFormat('en-GB',{month:'long',year:'numeric',timeZone:'UTC'}).format(date);
+  vesselYearControl.style.setProperty('--tooltip-position',`${Math.max(3,Math.min(97,progress*100))}%`);
+}
+vesselYearRange.addEventListener('input',updateVesselPositions);
+function setVesselAutoplay(playing){
+  if(vesselYearTimer){clearInterval(vesselYearTimer);vesselYearTimer=null}
+  if(playing)vesselYearTimer=setInterval(()=>{vesselYearRange.value=(Number(vesselYearRange.value)+1)%365;updateVesselPositions()},70);
+}
+vesselYearRange.addEventListener('pointerdown',()=>{setVesselAutoplay(false);vesselYearControl.classList.add('dragging')});
+vesselYearRange.addEventListener('pointerup',()=>{vesselYearControl.classList.remove('dragging');setVesselAutoplay(true)});
+vesselYearRange.addEventListener('pointercancel',()=>{vesselYearControl.classList.remove('dragging');setVesselAutoplay(true)});
+vesselYearRange.addEventListener('focus',()=>setVesselAutoplay(false));
+vesselYearRange.addEventListener('blur',()=>setVesselAutoplay(true));
+updateVesselPositions();
+if(!window.matchMedia('(prefers-reduced-motion: reduce)').matches)setVesselAutoplay(true);
+
 const vessels=[
-  {name:'RRS Discovery',type:'Oceanographic research vessel',description:'Long-range, multidisciplinary science platform with the programme’s highest share of active research days.',days:341,science:238,emissions:'6.9k',detail:'Discovery combines global range with advanced oceanographic capability. Its annual programme spans climate, deep-ocean and ecosystem research.',ports:'8',missions:'15',utilisation:'93%',image:'assets/vessels/rrs-discovery.jpg',alt:'RRS Discovery leaving Liverpool',credit:'Photo: Andrew · CC BY 2.0',creditUrl:'https://commons.wikimedia.org/wiki/File:RRS_Discovery_Leaving_Liverpool.jpg'},
-  {name:'RRS James Cook',type:'Deep-sea research vessel',description:'A specialist deep-ocean platform balancing extended science campaigns with longer international passages.',days:326,science:216,emissions:'8.9k',detail:'James Cook supports complex deep-sea expeditions, requiring specialised equipment and a broad international logistics network.',ports:'11',missions:'13',utilisation:'89%',image:'assets/vessels/rrs-james-cook.jpg',alt:'RRS James Cook at the National Oceanography Centre',credit:'Photo: Michael · CC0',creditUrl:'https://commons.wikimedia.org/wiki/File:RRS_James_Cook,_NOCS_28_May_2025.jpg'},
-  {name:'RRS SDA',type:'Polar research vessel',description:'A flexible polar platform supporting multidisciplinary science, autonomous operations and extended missions in challenging environments.',days:188,science:100,emissions:'5.6k',detail:'The Sir David Attenborough provides a capable base for polar science, autonomous systems and long-duration campaigns.',ports:'6',missions:'9',utilisation:'52%',image:'assets/vessels/rrs-sda.jpg',alt:'RRS Sir David Attenborough during launch',credit:'Photo: Rodhullandemu · CC BY-SA 4.0',creditUrl:'https://commons.wikimedia.org/wiki/File:Launch_of_RRS_Sir_David_Attenborough_05.jpg'}
+  {name:'RRS Discovery',type:'Oceanographic research vessel',description:'Long-range, multidisciplinary science platform with the programme’s highest share of active research days.',days:341,science:238,emissions:'6.9k',detail:'Discovery combines global range with advanced oceanographic capability. Its annual programme spans climate, deep-ocean and ecosystem research.',ports:'8',missions:'15',utilisation:'93%',image:'assets/vessels/rrs-discovery-generated.png',alt:'Illustrative representation of RRS Discovery at sea'},
+  {name:'RRS James Cook',type:'Deep-sea research vessel',description:'A specialist deep-ocean platform balancing extended science campaigns with longer international passages.',days:326,science:216,emissions:'8.9k',detail:'James Cook supports complex deep-sea expeditions, requiring specialised equipment and a broad international logistics network.',ports:'11',missions:'13',utilisation:'89%',image:'assets/vessels/rrs-james-cook-generated.png',alt:'Illustrative representation of RRS James Cook at sea'},
+  {name:'RRS SDA',type:'Polar research vessel',description:'A flexible polar platform supporting multidisciplinary science, autonomous operations and extended missions in challenging environments.',days:188,science:100,emissions:'5.6k',detail:'The Sir David Attenborough provides a capable base for polar science, autonomous systems and long-duration campaigns.',ports:'6',missions:'9',utilisation:'52%',image:'assets/vessels/rrs-sda-generated.png',alt:'Illustrative representation of RRS Sir David Attenborough in polar waters'}
 ];
 const tabs=document.querySelector('.vessel-tabs');
-function showVessel(i){const v=vessels[i],image=document.querySelector('#vessel-image');document.querySelectorAll('.vessel-tabs button').forEach((b,j)=>b.classList.toggle('active',i===j));document.querySelector('#vessel-type').textContent=v.type;document.querySelector('#vessel-name').textContent=v.name;document.querySelector('#vessel-description').textContent=v.description;document.querySelector('#vessel-metrics').innerHTML=`<div><strong>${v.days}</strong><span>ACTIVE DAYS</span></div><div><strong>${v.science}</strong><span>SCIENCE DAYS</span></div><div><strong>${v.emissions}</strong><span>T CO₂E</span></div>`;image.src=v.image;image.alt=v.alt;document.querySelector('#vessel-credit').innerHTML=`<a href="${v.creditUrl}" target="_blank" rel="noreferrer">${v.credit}</a>`;document.querySelector('#vessel-more').onclick=()=>openPopover(v)}
+function showVessel(i){const v=vessels[i],image=document.querySelector('#vessel-image');document.querySelectorAll('.vessel-tabs button').forEach((b,j)=>b.classList.toggle('active',i===j));document.querySelector('#vessel-type').textContent=v.type;document.querySelector('#vessel-name').textContent=v.name;document.querySelector('#vessel-description').textContent=v.description;document.querySelector('#vessel-metrics').innerHTML=`<div><strong>${v.days}</strong><span>ACTIVE DAYS</span></div><div><strong>${v.science}</strong><span>SCIENCE DAYS</span></div><div><strong>${v.emissions}</strong><span>T CO₂E</span></div>`;image.src=v.image;image.alt=v.alt;document.querySelector('#vessel-more').onclick=()=>openPopover(v)}
 vessels.forEach((v,i)=>{const b=document.createElement('button');b.textContent=v.name.replace('RRS ','');b.setAttribute('role','tab');b.onclick=()=>showVessel(i);tabs.append(b)});showVessel(0);
 const popover=document.querySelector('#popover'),backdrop=document.querySelector('#popover-backdrop');
-function openPopover(v){document.querySelector('#popover-title').textContent=v.name;document.querySelector('#popover-body').textContent=v.detail;document.querySelector('#popover-data').innerHTML=`<div><span>Ports visited</span><b>${v.ports}</b></div><div><span>Missions</span><b>${v.missions}</b></div><div><span>Utilisation</span><b>${v.utilisation}</b></div>`;popover.classList.add('open');backdrop.classList.add('open');popover.setAttribute('aria-hidden','false')}
-function closePopover(){popover.classList.remove('open');backdrop.classList.remove('open');popover.setAttribute('aria-hidden','true')}
+document.querySelectorAll('[data-campaign]').forEach(button=>button.addEventListener('click',()=>openCampaign(button.dataset.campaign)));
+function openCampaign(id){
+  const template=document.getElementById(id),card=template.closest('article');
+  openPopover({name:card.querySelector('h4').textContent,detail:card.querySelector('h4 + p').textContent,ports:'',missions:'',utilisation:''});
+  popover.classList.add('campaign-panel');
+  popover.querySelector('.kicker').textContent=card.querySelector('.kicker').textContent;
+  const content=document.createElement('div');content.className='campaign-content';
+  content.append(template.content.cloneNode(true));
+  document.querySelector('#popover-data').replaceChildren(content);
+}
+let panelTrigger;
+function openPopover(v){panelTrigger=document.activeElement;popover.classList.remove('campaign-panel');popover.querySelector('.kicker').textContent='Vessel profile';document.querySelector('#popover-title').textContent=v.name;document.querySelector('#popover-body').textContent=v.detail;document.querySelector('#popover-data').innerHTML=`<div><span>Ports visited</span><b>${v.ports}</b></div><div><span>Missions</span><b>${v.missions}</b></div><div><span>Utilisation</span><b>${v.utilisation}</b></div>`;popover.classList.add('open');backdrop.classList.add('open');popover.setAttribute('aria-hidden','false');popover.setAttribute('aria-labelledby','popover-title');popover.scrollTop=0;popover.querySelector('button').focus()}
+function closePopover(){popover.classList.remove('open');backdrop.classList.remove('open');popover.setAttribute('aria-hidden','true');panelTrigger?.focus({preventScroll:true})}
 popover.querySelector('button').onclick=closePopover;backdrop.onclick=closePopover;document.addEventListener('keydown',e=>{if(e.key==='Escape')closePopover()});
-
-const ports=[{name:'Southampton',x:495,y:117,freight:28,people:184,type:'combined'},{name:'Reykjavík',x:443,y:74,freight:12,people:63,type:'people'},{name:'Cape Town',x:593,y:377,freight:22,people:118,type:'combined'},{name:'Punta Arenas',x:292,y:407,freight:19,people:96,type:'freight'},{name:'San Diego',x:122,y:193,freight:16,people:112,type:'people'},{name:'Singapore',x:795,y:272,freight:29,people:158,type:'combined'},{name:'Hobart',x:887,y:393,freight:0,people:111,type:'people'}];
-const origin=ports[0],lines=document.querySelector('#route-lines'),nodes=document.querySelector('#route-nodes'),tooltip=document.querySelector('#map-tooltip');
-ports.slice(1).forEach((p,i)=>{const type=p.type==='combined'?(i%2?'people':'freight'):p.type;lines.insertAdjacentHTML('beforeend',`<path class="route ${type}" data-type="${type}" d="M${origin.x} ${origin.y} Q${(origin.x+p.x)/2} ${Math.min(origin.y,p.y)-80} ${p.x} ${p.y}"/>`)});
-ports.forEach(p=>{const t=p.type==='combined'?'freight':p.type;nodes.insertAdjacentHTML('beforeend',`<circle class="node ${t}" data-type="${p.type}" data-name="${p.name}" data-freight="${p.freight}" data-people="${p.people}" cx="${p.x}" cy="${p.y}" r="7" tabindex="0"/>`)});
-function showTip(el){const map=document.querySelector('#world-map').getBoundingClientRect(),rect=el.getBoundingClientRect();tooltip.innerHTML=`<strong>${el.dataset.name}</strong><br>${el.dataset.freight} freight · ${el.dataset.people} journeys`;tooltip.style.display='block';tooltip.style.left=(rect.left-map.left+12)+'px';tooltip.style.top=(rect.top-map.top-40)+'px'}
-nodes.querySelectorAll('.node').forEach(n=>{n.addEventListener('mouseenter',()=>showTip(n));n.addEventListener('focus',()=>showTip(n));n.addEventListener('mouseleave',()=>tooltip.style.display='none');n.addEventListener('blur',()=>tooltip.style.display='none')});
-document.querySelectorAll('[data-route]').forEach(btn=>btn.onclick=()=>{document.querySelectorAll('[data-route]').forEach(b=>b.classList.remove('active'));btn.classList.add('active');const mode=btn.dataset.route;document.querySelectorAll('.route,.node').forEach(el=>{const matches=mode==='combined'||el.dataset.type===mode||el.dataset.type==='combined';el.style.opacity=matches?'0.8':'0.08';el.style.pointerEvents=matches?'auto':'none'})});
-
-const ranges=['vessel','freight','travel'];function updateScenario(){ranges.forEach(k=>document.querySelector(`#${k}-output`).textContent=document.querySelector(`#${k}-range`).value+'%');const v=+document.querySelector('#vessel-range').value,f=+document.querySelector('#freight-range').value,t=+document.querySelector('#travel-range').value;const reduction=(v*.72+f*.16+t*.12),saved=Math.round(21328*reduction/100);document.querySelector('#reduction-value').textContent='−'+reduction.toFixed(1)+'%';document.querySelector('#saved-value').textContent=saved.toLocaleString('en-GB');document.querySelector('#result-fill').style.width=Math.min(100,reduction*3.4)+'%'}ranges.forEach(k=>document.querySelector(`#${k}-range`).oninput=updateScenario);document.querySelector('#reset-scenario').onclick=()=>{document.querySelector('#vessel-range').value=0;document.querySelector('#freight-range').value=0;document.querySelector('#travel-range').value=0;updateScenario()};updateScenario();
 
 const sections=[...document.querySelectorAll('.chapter')],navLinks=[...document.querySelectorAll('.chapter-nav a')];
 const sectionObserver=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting){const activeIndex=sections.indexOf(e.target);navLinks.forEach(a=>a.classList.toggle('active',a.getAttribute('href')==='#'+e.target.id));document.querySelector('#page-progress').style.height=(activeIndex/(sections.length-1)*100)+'%'}})},{rootMargin:'-35% 0px -55% 0px'});sections.forEach(s=>sectionObserver.observe(s));
