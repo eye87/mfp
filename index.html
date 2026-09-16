@@ -18,6 +18,20 @@
     <button class="menu-button" type="button" aria-label="Open chapter navigation" aria-expanded="false"><span></span><span></span></button>
   </header>
 
+  <nav class="app-nav" aria-label="Primary navigation">
+    <button class="nav-mode-toggle" type="button" aria-label="Compacte navigatie inschakelen" aria-pressed="false" title="Navigatie inklappen">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>
+    </button>
+    <a href="#dashboard" data-view-link="dashboard" class="active" title="Dashboard">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 13h6v7H4zm10-9h6v16h-6zM4 4h6v5H4zm10 0h6"/></svg>
+      <span>Dashboard</span>
+    </a>
+    <a href="#overview" data-view-link="story" title="Data story">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4h14v16H5zM8 8h8M8 12h8M8 16h5"/></svg>
+      <span>Data story</span>
+    </a>
+  </nav>
+
   <aside class="chapter-nav" aria-label="Chapter navigation">
     <ol>
       <li><a href="#overview" class="active"><i></i><span>Overview</span></a></li>
@@ -37,7 +51,35 @@
     </div>
   </aside>
 
-  <main>
+  <section id="dashboard" class="dashboard-view" aria-labelledby="dashboard-title">
+    <header class="dashboard-heading">
+      <div>
+        <p class="kicker">Marine programme · at a glance</p>
+        <h1 id="dashboard-title">Programme <em>dashboard.</em></h1>
+        <p class="dashboard-intro">See how vessel time, completed missions and the programme’s carbon footprint came together across 2024–25.</p>
+      </div>
+    </header>
+    <div class="dashboard-grid">
+      <article class="dashboard-card metric-card metric-primary"><span>Programme utilisation</span><strong data-count="78" data-suffix="%">78%</strong><small>+4.2% vs previous year</small><i style="--value:78%"></i></article>
+      <article class="dashboard-card metric-card"><span>Missions completed</span><strong data-count="37">37</strong><small>Across 18 countries</small><i style="--value:68%"></i></article>
+      <article class="dashboard-card metric-card"><span>Active vessel days</span><strong data-count="855">855</strong><small>of 1,095 available</small><i style="--value:78%"></i></article>
+      <article class="dashboard-card metric-card"><span>Combined footprint</span><strong data-count="21.3" data-decimals="1" data-suffix="k">21.3k</strong><small>tonnes CO₂e</small><i style="--value:61%"></i></article>
+      <article class="dashboard-card dashboard-chart activity-chart">
+        <div class="card-heading"><div><span>Activity by vessel</span><h4>Active days · 2024-25</h4></div><b>855 total</b></div>
+        <div class="vessel-bars" aria-label="RRS Discovery 341 days, RRS James Cook 326 days, RRS SDA 188 days"><div><label>Discovery <em>341</em></label><i><b style="--bar:100%"></b></i></div><div><label>James Cook <em>326</em></label><i><b style="--bar:95.6%"></b></i></div><div><label>SDA <em>188</em></label><i><b style="--bar:55.1%"></b></i></div></div>
+      </article>
+      <article class="dashboard-card dashboard-chart footprint-chart">
+        <div class="card-heading"><div><span>Footprint split</span><h4>Tonnes CO₂e by driver</h4></div></div>
+        <div class="mini-donut" aria-label="72% vessel operations, 16% freight, 12% crew travel">
+          <svg viewBox="0 0 100 100" aria-label="Footprint split by emissions driver"></svg>
+          <strong>21.3k<small>t CO₂e</small></strong>
+        </div>
+        <ul><li><i></i><span>Vessel operations</span><b>72%</b></li><li><i></i><span>Freight movements</span><b>16%</b></li><li><i></i><span>Crew travel</span><b>12%</b></li></ul>
+      </article>
+    </div>
+  </section>
+
+  <main id="story" class="story-view">
     <section id="overview" class="chapter hero" data-title="Overview">
       <div class="hero-orbit" aria-hidden="true"><div class="orbit orbit-one"></div><div class="orbit orbit-two"></div><div class="globe"><span></span></div></div>
       <div class="hero-content reveal">
@@ -166,11 +208,11 @@
     </section>
 
     <section id="fleet" class="chapter dark-section section-shell" data-title="Fleet">
-      <div class="section-intro reveal"><p class="kicker">05 · Fleet</p><h2>Three research vessels.<br><em>How they compare.</em></h2><p>Compare Discovery, James Cook and Sir David Attenborough by active days, science days and estimated emissions. Select a vessel to explore its role and contribution to the programme.</p></div>
+      <div class="section-intro reveal"><p class="kicker">05 · Fleet</p><h2>Three research vessels.<br><em>How they compare.</em></h2><p>Compare the fleet by research time, utilisation and estimated emissions. Select a vessel to explore its role in the programme.</p></div>
       <div class="vessel-tabs reveal" role="tablist" aria-label="Select vessel"></div>
       <div class="vessel-panel reveal">
         <figure class="ship-illustration"><img id="vessel-image" src="assets/vessels/rrs-discovery-generated.png" alt="Illustrative representation of RRS Discovery at sea"></figure>
-        <div class="vessel-copy"><p class="kicker" id="vessel-type"></p><h3 id="vessel-name"></h3><p id="vessel-description"></p><div class="vessel-metrics" id="vessel-metrics"></div><button class="text-button" id="vessel-more" type="button">View vessel detail <span>↗</span></button></div>
+        <div class="vessel-copy"><p class="kicker" id="vessel-type"></p><h3 id="vessel-name"></h3><p id="vessel-description"></p><div class="science-share" id="science-share"></div><div class="vessel-metrics" id="vessel-metrics"></div><button class="text-button" id="vessel-more" type="button">View vessel detail <span>↗</span></button></div>
       </div>
       <footer><div class="brand footer-brand"><img src="icon-marine-research.svg" alt="" width="50" height="50" aria-hidden="true"></div><a href="#overview"><span>Back to top</span><i aria-hidden="true">↑</i></a></footer>
     </section>

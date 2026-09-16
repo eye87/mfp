@@ -97,13 +97,13 @@ updateVesselPositions();
 if(!window.matchMedia('(prefers-reduced-motion: reduce)').matches)setVesselAutoplay(true);
 
 const vessels=[
-  {name:'RRS Discovery',type:'Oceanographic research vessel',description:'Long-range, multidisciplinary science platform with the programme’s highest share of active research days.',days:341,science:238,emissions:'6.9k',detail:'Discovery combines global range with advanced oceanographic capability. Its annual programme spans climate, deep-ocean and ecosystem research.',ports:'8',missions:'15',utilisation:'93%',image:'assets/vessels/rrs-discovery-generated.png',alt:'Illustrative representation of RRS Discovery at sea'},
-  {name:'RRS James Cook',type:'Deep-sea research vessel',description:'A specialist deep-ocean platform balancing extended science campaigns with longer international passages.',days:326,science:216,emissions:'8.9k',detail:'James Cook supports complex deep-sea expeditions, requiring specialised equipment and a broad international logistics network.',ports:'11',missions:'13',utilisation:'89%',image:'assets/vessels/rrs-james-cook-generated.png',alt:'Illustrative representation of RRS James Cook at sea'},
-  {name:'RRS SDA',type:'Polar research vessel',description:'A flexible polar platform supporting multidisciplinary science, autonomous operations and extended missions in challenging environments.',days:188,science:100,emissions:'5.6k',detail:'The Sir David Attenborough provides a capable base for polar science, autonomous systems and long-duration campaigns.',ports:'6',missions:'9',utilisation:'52%',image:'assets/vessels/rrs-sda-generated.png',alt:'Illustrative representation of RRS Sir David Attenborough in polar waters'}
+  {name:'RRS Discovery',tab:'Discovery',type:'Oceanographic research vessel',description:'Long-range, multidisciplinary science platform with the programme’s highest share of active research days.',days:341,science:238,emissions:'6.9k',detail:'Discovery combines global range with advanced oceanographic capability. Its annual programme spans climate, deep-ocean and ecosystem research.',ports:'8',missions:'15',utilisation:'93%',image:'assets/vessels/rrs-discovery-generated.png',alt:'Illustrative representation of RRS Discovery at sea'},
+  {name:'RRS James Cook',tab:'James Cook',type:'Deep-sea research vessel',description:'A specialist deep-ocean platform balancing extended science campaigns with longer international passages.',days:326,science:216,emissions:'8.9k',detail:'James Cook supports complex deep-sea expeditions, requiring specialised equipment and a broad international logistics network.',ports:'11',missions:'13',utilisation:'89%',image:'assets/vessels/rrs-james-cook-generated.png',alt:'Illustrative representation of RRS James Cook at sea'},
+  {name:'RRS Sir David Attenborough',tab:'Attenborough',type:'Polar research vessel',description:'A flexible polar platform supporting multidisciplinary science, autonomous operations and extended missions in challenging environments.',days:188,science:100,emissions:'5.6k',detail:'The Sir David Attenborough provides a capable base for polar science, autonomous systems and long-duration campaigns.',ports:'6',missions:'9',utilisation:'52%',image:'assets/vessels/rrs-sda-generated.png',alt:'Illustrative representation of RRS Sir David Attenborough in polar waters'}
 ];
 const tabs=document.querySelector('.vessel-tabs');
-function showVessel(i){const v=vessels[i],image=document.querySelector('#vessel-image');document.querySelectorAll('.vessel-tabs button').forEach((b,j)=>b.classList.toggle('active',i===j));document.querySelector('#vessel-type').textContent=v.type;document.querySelector('#vessel-name').textContent=v.name;document.querySelector('#vessel-description').textContent=v.description;document.querySelector('#vessel-metrics').innerHTML=`<div><strong>${v.days}</strong><span>ACTIVE DAYS</span></div><div><strong>${v.science}</strong><span>SCIENCE DAYS</span></div><div><strong>${v.emissions}</strong><span>T CO₂E</span></div>`;image.src=v.image;image.alt=v.alt;document.querySelector('#vessel-more').onclick=()=>openPopover(v)}
-vessels.forEach((v,i)=>{const b=document.createElement('button');b.textContent=v.name.replace('RRS ','');b.setAttribute('role','tab');b.onclick=()=>showVessel(i);tabs.append(b)});showVessel(0);
+function showVessel(i){const v=vessels[i],image=document.querySelector('#vessel-image'),scienceShare=Math.round(v.science/v.days*100);document.querySelectorAll('.vessel-tabs button').forEach((b,j)=>b.classList.toggle('active',i===j));document.querySelector('#vessel-type').textContent=v.type;document.querySelector('#vessel-name').textContent=v.name;document.querySelector('#vessel-description').textContent=v.description;document.querySelector('#science-share').innerHTML=`<span><strong>${scienceShare}%</strong><small>of active days dedicated to science</small></span><i style="--science-share:${scienceShare}%"></i>`;document.querySelector('#vessel-metrics').innerHTML=`<div><strong>${v.days}</strong><span>ACTIVE DAYS</span></div><div><strong>${v.science}</strong><span>SCIENCE DAYS</span></div><div><strong>${v.emissions}</strong><span>T CO₂E</span></div>`;image.src=v.image;image.alt=v.alt;document.querySelector('#vessel-more').onclick=()=>openPopover(v)}
+vessels.forEach((v,i)=>{const b=document.createElement('button');b.textContent=v.tab;b.setAttribute('role','tab');b.onclick=()=>showVessel(i);tabs.append(b)});showVessel(0);
 const popover=document.querySelector('#popover'),backdrop=document.querySelector('#popover-backdrop');
 document.querySelectorAll('[data-campaign]').forEach(card=>{
   card.addEventListener('click',()=>openCampaign(card.dataset.campaign));
@@ -150,6 +150,101 @@ if(programmeStats&&!window.matchMedia('(prefers-reduced-motion: reduce)').matche
 }
 window.addEventListener('scroll',()=>{document.querySelector('.topbar').classList.toggle('scrolled',scrollY>20)},{passive:true});
 const menu=document.querySelector('.menu-button'),nav=document.querySelector('.chapter-nav');menu.onclick=()=>{const open=nav.classList.toggle('open');menu.setAttribute('aria-expanded',String(open))};navLinks.forEach(a=>a.onclick=()=>{nav.classList.remove('open');menu.setAttribute('aria-expanded','false')});
+
+const viewLinks=[...document.querySelectorAll('[data-view-link]')];
+const storyHashes=new Set(sections.map(section=>`#${section.id}`));
+const dashboardView=document.querySelector('.dashboard-view');
+const navModeToggle=document.querySelector('.nav-mode-toggle');
+const reducedMotion=window.matchMedia('(prefers-reduced-motion: reduce)');
+const dashboardDonut=dashboardView.querySelector('.mini-donut');
+const dashboardPie=dashboardDonut.querySelector('svg');
+let dashboardPieAngle=-Math.PI/2;
+emissions.forEach((emission,index)=>{
+  const start=dashboardPieAngle,end=start+emission.pct/100*Math.PI*2;
+  dashboardPieAngle=end;
+  const slice=document.createElementNS('http://www.w3.org/2000/svg','g'),base=document.createElementNS('http://www.w3.org/2000/svg','path'),pop=document.createElementNS('http://www.w3.org/2000/svg','path');
+  slice.classList.add('dashboard-pie-slice');
+  slice.style.setProperty('--slice-delay',`${index*.1}s`);
+  slice.dataset.value=(emission.value/1000).toFixed(1)+'k';
+  slice.dataset.label=emission.name;
+  slice.setAttribute('tabindex','0');slice.setAttribute('role','button');slice.setAttribute('aria-label',`${emission.name}, ${emission.pct}%`);
+  base.classList.add('dashboard-pie-base');base.setAttribute('d',piePath(start,end));base.setAttribute('fill',emission.color);
+  pop.classList.add('dashboard-pie-pop');pop.setAttribute('d',piePath(start,end,44.5,49));pop.setAttribute('fill',emission.color);
+  slice.append(base,pop);dashboardPie.append(slice);
+});
+const dashboardDonutSegments=[...dashboardPie.querySelectorAll('.dashboard-pie-slice')];
+const dashboardLegendItems=[...dashboardView.querySelectorAll('.footprint-chart li')];
+const dashboardDonutValue=dashboardDonut.querySelector('strong');
+const dashboardDonutLabel=dashboardDonutValue.querySelector('small');
+function resetDashboardDonut(){
+  dashboardDonutSegments.forEach(segment=>segment.classList.remove('selected','muted'));
+  dashboardLegendItems.forEach(item=>item.classList.remove('active'));
+  dashboardDonutValue.firstChild.nodeValue='21.3k';
+  dashboardDonutLabel.textContent='t CO₂e';
+}
+function selectDashboardDonutSegment(activeSegment){
+  const activeIndex=dashboardDonutSegments.indexOf(activeSegment);
+  dashboardDonutSegments.forEach(segment=>{
+    segment.classList.toggle('selected',segment===activeSegment);
+    segment.classList.toggle('muted',segment!==activeSegment);
+  });
+  dashboardLegendItems.forEach((item,index)=>item.classList.toggle('active',index===activeIndex));
+  dashboardDonutValue.firstChild.nodeValue=activeSegment.dataset.value;
+  dashboardDonutLabel.textContent=activeSegment.dataset.label;
+}
+dashboardDonutSegments.forEach(segment=>{
+  segment.addEventListener('click',event=>{event.stopPropagation();selectDashboardDonutSegment(segment)});
+  segment.addEventListener('keydown',event=>{if(event.key==='Enter'||event.key===' '){event.preventDefault();selectDashboardDonutSegment(segment)}});
+});
+dashboardDonut.addEventListener('click',event=>{if(!event.target.closest('.dashboard-pie-slice'))resetDashboardDonut()});
+dashboardLegendItems.forEach((item,index)=>{
+  item.tabIndex=0;
+  item.setAttribute('role','button');
+  item.setAttribute('aria-label',`${emissions[index].name}, ${emissions[index].pct}%`);
+  item.addEventListener('click',()=>selectDashboardDonutSegment(dashboardDonutSegments[index]));
+  item.addEventListener('keydown',event=>{if(event.key==='Enter'||event.key===' '){event.preventDefault();selectDashboardDonutSegment(dashboardDonutSegments[index])}});
+});
+function animateDashboard(){
+  if(reducedMotion.matches){
+    dashboardView.classList.add('is-animated');
+    return;
+  }
+  dashboardView.classList.remove('is-animated');
+  dashboardView.querySelectorAll('[data-count]').forEach(element=>{
+    const target=Number(element.dataset.count),decimals=Number(element.dataset.decimals||0),suffix=element.dataset.suffix||'';
+    element.textContent=(0).toFixed(decimals)+suffix;
+    const start=performance.now(),duration=1250;
+    const tick=now=>{
+      const progress=Math.min(1,(now-start)/duration),eased=1-Math.pow(1-progress,4),value=target*eased;
+      element.textContent=value.toFixed(decimals)+suffix;
+      if(progress<1)requestAnimationFrame(tick);
+    };
+    requestAnimationFrame(tick);
+  });
+  requestAnimationFrame(()=>requestAnimationFrame(()=>{
+    dashboardView.classList.add('is-animated');
+  }));
+}
+function setCompactNavigation(compact){
+  document.body.classList.toggle('nav-compact',compact);
+  navModeToggle.setAttribute('aria-pressed',String(compact));
+  navModeToggle.setAttribute('aria-label',compact?'Uitgeschreven navigatie inschakelen':'Compacte navigatie inschakelen');
+  navModeToggle.title=compact?'Navigatie uitklappen':'Navigatie inklappen';
+  try{localStorage.setItem('mfp-nav-compact',String(compact))}catch{}
+}
+try{setCompactNavigation(localStorage.getItem('mfp-nav-compact')==='true')}catch{setCompactNavigation(false)}
+navModeToggle.addEventListener('click',()=>setCompactNavigation(!document.body.classList.contains('nav-compact')));
+function syncView(){
+  const isStory=storyHashes.has(location.hash);
+  document.body.dataset.view=isStory?'story':'dashboard';
+  viewLinks.forEach(link=>link.classList.toggle('active',link.dataset.viewLink===(isStory?'story':'dashboard')));
+  menu.style.visibility=isStory?'visible':'hidden';
+  if(!isStory&&location.hash!=='#dashboard')history.replaceState(null,'','#dashboard');
+  if(!isStory)animateDashboard();
+}
+window.addEventListener('hashchange',syncView);
+viewLinks.forEach(link=>link.addEventListener('click',()=>{if(link.dataset.viewLink==='dashboard'){window.scrollTo(0,0);if(document.body.dataset.view==='dashboard')animateDashboard()}}));
+syncView();
 
 const parallaxHero=document.querySelector('.hero'),parallaxGlobe=document.querySelector('.globe');
 if(parallaxHero&&parallaxGlobe&&!window.matchMedia('(prefers-reduced-motion: reduce)').matches){
