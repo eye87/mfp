@@ -375,6 +375,11 @@ function updateMobileHeader(){
 }
 window.addEventListener('scroll',updateMobileHeader,{passive:true});
 window.addEventListener('resize',updateMobileHeader);
+// Reveal for keyboard navigation without letting persistent touch focus pin the bar.
+mobileHeader.addEventListener('focusin',()=>{
+  mobileHeader.classList.remove('mobile-header-hidden');
+  headerScrollAnchor=Math.max(0,window.scrollY);
+});
 window.addEventListener('hashchange',()=>{mobileHeader.classList.remove('mobile-header-hidden');headerScrollAnchor=Math.max(0,window.scrollY)});
 const menu=document.querySelector('.menu-button'),nav=document.querySelector('.chapter-nav');menu.onclick=()=>{const open=nav.classList.toggle('open');menu.setAttribute('aria-expanded',String(open));menu.setAttribute('aria-label',open?'Close navigation':'Open navigation')};navLinks.forEach(a=>a.onclick=()=>{nav.classList.remove('open');menu.setAttribute('aria-expanded','false');menu.setAttribute('aria-label','Open navigation')});
 
