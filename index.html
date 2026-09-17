@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="Marine Facilities Planning — interactive data-story prototype">
   <title>Marine Programme 2024–25</title>
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@300;400;500;600&family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,700&display=swap" rel="stylesheet">
@@ -12,10 +13,10 @@
 </head>
 <body>
   <header class="topbar">
-    <a class="brand" href="#overview" aria-label="Marine Facilities Planning home">
+    <a class="brand" href="#dashboard" data-view-link="dashboard" aria-label="Go to dashboard">
       <img src="icon-marine-research.svg" alt="" width="50" height="50" aria-hidden="true">
     </a>
-    <button class="menu-button" type="button" aria-label="Open chapter navigation" aria-expanded="false"><span></span><span></span></button>
+    <button class="menu-button" type="button" aria-label="Open navigation" aria-expanded="false"><span></span><span></span><span></span></button>
   </header>
 
   <nav class="app-nav" aria-label="Primary navigation">
@@ -33,6 +34,16 @@
   </nav>
 
   <aside class="chapter-nav" aria-label="Chapter navigation">
+    <nav class="mobile-primary" aria-label="Mobile primary navigation">
+      <a href="#dashboard" data-view-link="dashboard">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 13h6v7H4zm10-9h6v16h-6zM4 4h6v5H4zm10 0h6"/></svg>
+        <span>Dashboard</span>
+      </a>
+      <a href="#overview" data-view-link="story">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4h14v16H5zM8 8h8M8 12h8M8 16h5"/></svg>
+        <span>Data story</span>
+      </a>
+    </nav>
     <ol>
       <li><a href="#overview" class="active"><i></i><span>Overview</span></a></li>
       <li><a href="#programme"><i></i><span>Programme</span></a></li>
@@ -136,7 +147,7 @@
           </article>
           <article class="research-card" role="button" tabindex="0" data-campaign="campaign-sda" aria-haspopup="dialog" aria-label="Explore the campaign Observing a changing polar ocean">
             <figure class="research-image"><img src="assets/research/polar-sea-ice.jpg" alt="Sea ice across the Chukchi Sea during an Arctic ocean research mission"></figure>
-            <p class="kicker">RRS Sir David Attenborough · Polar waters</p>
+            <p class="kicker">RRS Attenborough · Polar waters</p>
             <h4>Observing a changing polar ocean</h4>
             <p>Ocean measurements and biological sampling to investigate the relationship between meltwater, ocean conditions and plankton.</p>
             <span class="campaign-button text-button" aria-hidden="true">Explore the campaign <span>↗</span></span>
@@ -173,10 +184,11 @@
       </div>
     </section>
 
-    <section id="logistics" class="chapter map-section section-shell" data-title="Logistics">
-      <div class="section-intro reveal"><p class="kicker">04 · Logistics</p><h2>Moving science<br><em>around the world.</em></h2><p>Follow the three research vessels as their annual programmes connect science across the world’s oceans.</p></div>
+<section id="logistics" class="chapter map-section section-shell" data-title="Logistics">
+      <div class="section-intro reveal"><p class="kicker">04 · Logistics</p><h2>Moving science<br><em>around the world.</em></h2><p>Move through the year to see where research activity is taking place, with multiple campaigns often active at the same time.</p></div>
+      <div class="map-option-heading reveal"><p class="kicker">Map option 01</p><h3>Editorial atlas</h3></div>
       <div class="world-map reveal" id="world-map">
-        <svg viewBox="0 0 1200 600" role="img" aria-label="Illustrative annual routes of RRS Discovery, RRS James Cook and RRS Sir David Attenborough across the world's oceans">
+        <svg viewBox="0 0 1200 600" role="img" aria-label="Research activity locations across the world's oceans throughout the reporting year">
           <defs>
             <pattern id="ocean-grid" width="60" height="60" patternUnits="userSpaceOnUse"><path d="M60 0H0V60" fill="none" stroke="rgba(16,42,43,.07)" stroke-width="1"/></pattern>
             <g id="ship-marker"><path d="M-18 4h36l-7 8h-22z"/><path d="M-8 3v-8h13l5 8z"/><path d="M-2-5v-8h2v8z"/></g>
@@ -198,13 +210,54 @@
           <g class="ship discovery-ship" id="discovery-ship"><use href="#ship-marker"/></g>
           <g class="ship cook-ship" id="cook-ship"><use href="#ship-marker"/></g>
           <g class="ship sda-ship" id="sda-ship"><use href="#ship-marker"/></g>
+          <g id="activity-points" role="img" aria-label="Research activity locations for the selected date"></g>
         </svg>
         <div class="vessel-year-control">
           <input id="vessel-year-range" type="range" min="0" max="364" value="181" step="0.1" aria-label="Move through the reporting year">
           <output class="vessel-year-tooltip" id="vessel-year-tooltip" for="vessel-year-range">July 2025</output>
         </div>
       </div>
-      <div class="fleet-route-legend reveal" aria-label="Vessel route legend"><span><i style="background:#39aa90"></i>RRS Discovery</span><span><i style="background:#d74400"></i>RRS James Cook</span><span><i style="background:#052b2b"></i>RRS Sir David Attenborough</span></div>
+      <div class="fleet-route-legend reveal" aria-label="Research activity legend"><span><i style="background:#39aa90"></i>RRS Discovery</span><span><i style="background:#d74400"></i>RRS James Cook</span><span><i style="background:#052b2b"></i>RRS Attenborough</span></div>
+
+      <article class="ocean-map-option reveal" aria-label="Research activity map">
+        <header class="ocean-map-header">
+          <div class="ocean-map-status" aria-live="polite">
+            <strong id="ocean-active-count">3 active locations</strong>
+            <span id="ocean-active-date">July 2025</span>
+          </div>
+          <button class="ocean-playback-toggle" id="ocean-playback-toggle" type="button" aria-label="Pause timeline" aria-pressed="false">
+            <svg class="playback-icon playback-icon-pause" viewBox="0 0 16 16" aria-hidden="true"><path d="M4.5 3.5v9M11.5 3.5v9"/></svg>
+            <svg class="playback-icon playback-icon-play" viewBox="0 0 16 16" aria-hidden="true"><path d="m5 3.5 7 4.5-7 4.5z"/></svg>
+            <span id="ocean-playback-label">Playing</span>
+          </button>
+        </header>
+        <div class="ocean-map-canvas" id="ocean-map-canvas">
+          <svg viewBox="0 0 1200 600" role="img" aria-label="Map showing research activity locations throughout the reporting year">
+            <defs>
+              <pattern id="ocean-map-grid" width="80" height="80" patternUnits="userSpaceOnUse"><path d="M80 0H0V80" fill="none" stroke="rgba(5,43,43,.065)" stroke-width="1"/></pattern>
+            </defs>
+            <rect width="1200" height="600" fill="#f6f4ee"/>
+            <rect width="1200" height="600" fill="url(#ocean-map-grid)"/>
+            <image class="ocean-map-detail" href="assets/maps/world-map.svg" x="30" y="30" width="1140" height="540" preserveAspectRatio="xMidYMid meet"/>
+            <g id="ocean-activity-points" role="img" aria-label="Research activity locations for the selected date"></g>
+          </svg>
+          <div class="ocean-map-popup" id="ocean-map-popup" role="status" hidden>
+            <button type="button" id="ocean-popup-close" aria-label="Close activity details">×</button>
+            <div class="ocean-popup-body">
+              <img id="ocean-feature-image" src="assets/vessels/rrs-discovery-generated.png" alt="">
+              <div>
+                <strong id="ocean-feature-name"></strong>
+                <small id="ocean-feature-vessel"></small>
+              </div>
+            </div>
+          </div>
+          <div class="ocean-year-control">
+            <div class="ocean-year-meta"><span>JAN</span><span id="ocean-year-label">JUL 2025</span><span>DEC</span></div>
+            <input id="ocean-year-range" type="range" min="0" max="364" value="181" step="0.1" aria-label="Move through the reporting year in map option 02">
+          </div>
+        </div>
+        <div class="ocean-map-legend" aria-label="Research vessel legend"><span><i style="--marker:#39aa90"></i>Discovery</span><span><i style="--marker:#ff6a35"></i>James Cook</span><span><i style="--marker:#052b2b"></i>Attenborough</span></div>
+      </article>
     </section>
 
     <section id="fleet" class="chapter dark-section section-shell" data-title="Fleet">
