@@ -646,8 +646,8 @@ body[data-view="dashboard"] .chapter-nav .period{pointer-events:auto}
 /* Keep Safari's exposed canvas light and account for iPhone safe areas. */
 html{background:var(--paper)}
 @media(max-width:900px){
-  .topbar{--mobile-header-height:78px;height:calc(var(--mobile-header-height) + env(safe-area-inset-top,0px))!important;padding-top:env(safe-area-inset-top,0px)!important;transition:transform .25s ease}
-  .topbar.mobile-header-hidden{transform:translateY(-100%);pointer-events:none}
+  .topbar{--mobile-header-height:78px;height:calc(var(--mobile-header-height) + env(safe-area-inset-top,0px))!important;padding-top:env(safe-area-inset-top,0px)!important;opacity:1;transition:transform .42s cubic-bezier(.16,1,.3,1),opacity .3s ease-out;will-change:transform,opacity}
+  .topbar.mobile-header-hidden{transform:translateY(calc(-100% - 2px));opacity:.94;pointer-events:none;transition-duration:.22s,.18s;transition-timing-function:cubic-bezier(.4,0,1,1),ease-in}
   .chapter-nav,body[data-view="dashboard"] .chapter-nav{top:calc(78px + env(safe-area-inset-top,0px))!important;height:calc(100dvh - 78px - env(safe-area-inset-top,0px))!important;padding-bottom:calc(24px + env(safe-area-inset-bottom,0px))!important}
 }
 @media(max-width:600px){
